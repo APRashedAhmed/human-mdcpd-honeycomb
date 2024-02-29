@@ -3,7 +3,7 @@ import {
   createDebriefTrial,
   finishTrial,
   instructionsTrial,
-  preloadTrial,
+  // preloadTrial,
   welcomeTrial,
 } from "../trials/honeycombTrials";
 import { createHoneycombBlock } from "./honeycombBlock";
@@ -14,14 +14,14 @@ import { createHoneycombBlock } from "./honeycombBlock";
  *
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
  */
-function createHoneycombTimeline(jsPsych) {
-  const honeycombTrials = createHoneycombBlock(jsPsych); // The first block repeats 5 times
+async function createHoneycombTimeline(jsPsych) {
+  const honeycombTrials = await createHoneycombBlock(jsPsych); // The first block repeats 5 times
   const debriefTrial = createDebriefTrial(jsPsych);
 
   const timeline = [
     welcomeTrial,
     enterFullscreen,
-    preloadTrial,
+    // preloadTrial,
     instructionsTrial,
     honeycombTrials,
     debriefTrial,

@@ -4,7 +4,7 @@ import instructionsResponse from "@jspsych/plugin-instructions";
 import preloadResponse from "@jspsych/plugin-preload";
 
 import { config, language, taskSettings } from "../config/main";
-import { div, image, p, b } from "../lib/markup/tags";
+import { div, p, b } from "../lib/markup/tags";
 
 const honeycombLanguage = language.trials.honeycomb;
 
@@ -27,23 +27,22 @@ const instructionsTrial = {
   type: instructionsResponse,
   pages: [
     p(honeycombLanguage.instructions.read),
-    p(honeycombLanguage.instructions.circle),
+    p(honeycombLanguage.instructions.details),
     // Add a page for very possible stimuli - displays the image and the correct response
     ...taskSettings.honeycomb.timeline_variables.map(({ stimulus, correct_response }) => {
       // Pull the color out of the file name
-      const color = stimulus.substring(stimulus.lastIndexOf("/") + 1, stimulus.indexOf("."));
+      const color = stimulus;
 
       // Build the instructions and image elements
       const instructionsMarkup = p(
         honeycombLanguage.instructions.example.start +
-          b(color) +
+          b(color, color ? { style: `color: ${color};` } : {}) +
           honeycombLanguage.instructions.example.middle +
           b(correct_response) +
           honeycombLanguage.instructions.example.end
       );
-      const imageMarkup = image({ src: stimulus });
 
-      return div(instructionsMarkup + imageMarkup);
+      return div(instructionsMarkup);
     }),
     p(honeycombLanguage.instructions.next),
   ],
@@ -78,6 +77,8 @@ const createDebriefTrial = (jsPsych) => ({
       debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
     );
     const completeMarkup = p(debriefLanguage.complete);
+    // jsPsych.data.get().localSave("json", "tutorial_experiment.json");
+    jsPsych.data.get().localSave("csv", "tutorial_experiment.csv");
 
     // Display the accuracy, reaction time, and complete message as 3 paragraphs in a row
     return accuracyMarkup + reactionTimeMarkup + completeMarkup;
