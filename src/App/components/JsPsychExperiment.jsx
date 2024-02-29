@@ -53,8 +53,10 @@ export default function JsPsychExperiment({
   }, [studyID, participantID]);
 
   /** Build and run the experiment timeline */
-  React.useEffect(() => {
-    const timeline = buildTimeline(jsPsych, studyID, participantID);
+  React.useEffect(async () => {
+    console.log("useEffect");
+    const timeline = await buildTimeline(jsPsych, studyID, participantID);
+    console.log(timeline);
     jsPsych.run(timeline);
   }, [jsPsych]);
 
