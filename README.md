@@ -4,11 +4,9 @@
 
 # Prerequisites/Dependencies
 
-To install all necessary dependencies and prerequisites for the task, follow the instructions here until the end of the page:
-https://brown-ccv.github.io/honeycomb-docs/docs/quick_start#installing-prerequisites
+To install all necessary dependencies and prerequisites for the task, follow the instructions [here](https://brown-ccv.github.io/honeycomb-docs/docs/quick_start#installing-prerequisites) until the end of the page
 
-If you don't have some fundamental prerequisites like git installed, follow the instructions here:
-https://brown-ccv.github.io/honeycomb-docs/docs/prerequisites
+If you don't have some fundamental prerequisites like git installed, follow the instructions [here](https://brown-ccv.github.io/honeycomb-docs/docs/prerequisites):
 
 # Starting a development server
 
