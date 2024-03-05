@@ -2,7 +2,7 @@
 
 [![DOI:10.1590/1516-4446-2020-1675](https://img.shields.io/badge/DOI-10.1590%2F1516--4446--2020--1675-orange)](https://doi.org/10.1590/1516-4446-2020-1675) [![docs](https://img.shields.io/badge/docs-stable-blue)](https://brown-ccv.github.io/honeycomb-docs/)
 
-###Prerequisites/Dependencies
+# Prerequisites/Dependencies
 
 To install all necessary dependencies and prerequisites for the task, follow the instructions here until the end of the page:
 https://brown-ccv.github.io/honeycomb-docs/docs/quick_start#installing-prerequisites
@@ -10,11 +10,11 @@ https://brown-ccv.github.io/honeycomb-docs/docs/quick_start#installing-prerequis
 If you don't have some fundamental prerequisites like git installed, follow the instructions here:
 https://brown-ccv.github.io/honeycomb-docs/docs/prerequisites
 
-###Starting a development server
+# Starting a development server
 
 To get started running a local development server, you'll need to run these few commands (**note that you'll need two separate terminal windows open**):
 
-`cd src` + `node server.js`_(assuming you're in the root directory)_
+`cd src` + `node server.js` _(assuming you're in the root directory)_
 
 `npm run dev` _(assuming you're in root directory)_
 
