@@ -14,8 +14,7 @@ https://brown-ccv.github.io/honeycomb-docs/docs/prerequisites
 
 To get started running a local development server, you'll need to run these few commands (**note that you'll need two separate terminal windows open**):
 
-`cd src` _(assuming you're in the root directory)_
-`node server.js`
+`cd src` + `node server.js`_(assuming you're in the root directory)_
 
 `npm run dev` _(assuming you're in root directory)_
 
