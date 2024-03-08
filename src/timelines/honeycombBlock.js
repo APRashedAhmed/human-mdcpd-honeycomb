@@ -85,8 +85,9 @@ async function createHoneycombBlock(jsPsych) {
               </div>`;
       return "<div>" + question + choices + "</div>";
     },
-    duration: 2000,
+    trial_duration: 2000,
     choices: ["1", "2", "3"],
+    response_ends_trial: true,
     data: {
       task: "response",
       correct_response: jsPsych.timelineVariable("correct_response"),
