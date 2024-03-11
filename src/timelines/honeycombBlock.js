@@ -4,10 +4,14 @@ import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response"
 // import { fixation } from "@brown-ccv/behavioral-task-trials";
 
 // import { config, taskSettings } from "../config/main";
+import { language } from "../config/main";
+import { p } from "../lib/markup/tags";
+
 // import { taskSettings } from "../config/main";
 
 async function createHoneycombBlock(jsPsych) {
   // const { fixation: fixationSettings } = taskSettings;
+  const honeycombLanguage = language.trials.honeycomb;
 
   const fetchVideoData = async () => {
     try {
@@ -35,6 +39,33 @@ async function createHoneycombBlock(jsPsych) {
   //     : fixationSettings.default_duration,
   // });
 
+  const debriefTrial = (jsPsych) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: () => {
+      //add language "if you need to take a break..., the next one will run for ~8min"
+      const responseTrials = jsPsych.data.get().filter({ task: "response" });
+      const correct_trials = responseTrials.filter({ correct: true });
+      const accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
+      const reactionTime = Math.round(correct_trials.select("rt").mean());
+
+      const debriefLanguage = honeycombLanguage.debrief;
+
+      const accuracyMarkup = p(
+        debriefLanguage.accuracy.start + accuracy + debriefLanguage.accuracy.end
+      );
+      const reactionTimeMarkup = p(
+        debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
+      );
+      const completeMarkup = p(debriefLanguage.completeBlock);
+
+      return accuracyMarkup + reactionTimeMarkup + completeMarkup;
+    },
+    choices: ["Enter"],
+    data: {
+      task: "Block Debrief",
+    },
+  });
+
   const fixation = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '<div style="font-size:60px;">+</div>',
@@ -45,15 +76,15 @@ async function createHoneycombBlock(jsPsych) {
     },
   };
 
-  const blockFixationTrial = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<div style="font-size:60px;">block fixation</div>',
-    choices: "NO_KEYS",
-    trial_duration: 2000,
-    data: {
-      task: "block fixation",
-    },
-  };
+  // const blockFixationTrial = {
+  //   type: jsPsychHtmlKeyboardResponse,
+  //   stimulus: '<div style="font-size:60px;">block fixation</div>',
+  //   choices: "NO_KEYS",
+  //   trial_duration: 2000,
+  //   data: {
+  //     task: "block fixation",
+  //   },
+  // };
 
   /**
    * Displays a colored circle and waits for participant to response with a keyboard press
@@ -85,7 +116,7 @@ async function createHoneycombBlock(jsPsych) {
               </div>`;
       return "<div>" + question + choices + "</div>";
     },
-    trial_duration: 2000,
+    trial_duration: 10000,
     choices: ["1", "2", "3"],
     response_ends_trial: true,
     data: {
@@ -110,7 +141,7 @@ async function createHoneycombBlock(jsPsych) {
       randomize_order: true, //shuffle videos within blocks
     };
     if (index !== 0) {
-      blockTimeline.push(blockFixationTrial);
+      blockTimeline.push(debriefTrial(jsPsych));
     }
     blockTimeline.push(videoProcedure);
   }

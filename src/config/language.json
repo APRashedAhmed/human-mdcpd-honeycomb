@@ -29,6 +29,7 @@
           "start": "Your average response time was ",
           "end": "ms."
         },
+        "completeBlock": "Press enter to move onto the next block!",
         "complete": "Press any key to complete the experiment. Thank you!"
       },
       "finish": "This experiment has ended."
