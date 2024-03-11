@@ -21,7 +21,6 @@ const jsPsychOptions = {
 async function buildTimeline(jsPsych, studyID, participantID) {
   console.log(`Building timeline for participant ${participantID} on study ${studyID}`);
   const timeline = await createHoneycombTimeline(jsPsych);
-  print(timeline, "timeline");
   // Dynamically adds the camera trials to the experiment if config.USE_CAMERA
   if (config.USE_CAMERA) {
     timeline.unshift(cameraStart(jsPsych)); // Add cameraStart as the first trial
