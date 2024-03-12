@@ -57,7 +57,6 @@ async function createHoneycombBlock(jsPsych) {
         debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
       );
       const completeMarkup = p(debriefLanguage.completeBlock);
-
       return accuracyMarkup + reactionTimeMarkup + completeMarkup;
     },
     choices: ["Enter"],
@@ -147,7 +146,7 @@ async function createHoneycombBlock(jsPsych) {
   }
   // blockTimeline = [blockTimeline[2]];
   const honeycombBlock = {
-    timeline: blockTimeline, //should be set of 5 fixations+videoProcedures
+    timeline: blockTimeline,
   };
 
   return honeycombBlock;
