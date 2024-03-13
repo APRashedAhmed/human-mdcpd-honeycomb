@@ -18,7 +18,11 @@
           "middle": ", press the key ",
           "end": " on the keyboard as fast as you can."
         },
-        "next": "Click next to begin."
+        "next": "Click next to begin.",
+        "nextTutorial": "Click next to begin a short tutorial"
+      },
+      "endTutorial": {
+        "instructions": "This is the end of the tutorial, click next to begin"
       },
       "debrief": {
         "accuracy": {
