@@ -18,6 +18,13 @@ To get started running a local development server, you'll need to run these few 
 
 This should start a live development server where you can freely make updates/changes which are reflected immediately
 
+You can also run a different version of the experiment with a short tutorial at the beginning
+consisting of 5 videos. To run this, it's mostly the same:
+
+`cd src` + `node server.js` _(assuming you're in the root directory)_
+
+`npm run dev:tutorial` _(assuming you're in root directory)_
+
 ## Citations
 
 [Provenza, N.R., Gelin, L.F.F., Mahaphanit, W., McGrath, M.C., Dastin-van Rijn, E.M., Fan, Y., Dhar, R., Frank, M.J., Restrepo, M.I., Goodman, W.K. and Borton, D.A., 2021. Honeycomb: a template for reproducible psychophysiological tasks for clinic, laboratory, and home use. Brazilian Journal of Psychiatry, 44, pp.147-155.](https://doi.org/10.1590/1516-4446-2020-1675)
