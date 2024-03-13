@@ -75,16 +75,6 @@ async function createHoneycombBlock(jsPsych) {
     },
   };
 
-  // const blockFixationTrial = {
-  //   type: jsPsychHtmlKeyboardResponse,
-  //   stimulus: '<div style="font-size:60px;">block fixation</div>',
-  //   choices: "NO_KEYS",
-  //   trial_duration: 2000,
-  //   data: {
-  //     task: "block fixation",
-  //   },
-  // };
-
   /**
    * Displays a colored circle and waits for participant to response with a keyboard press
    *
@@ -152,4 +142,65 @@ async function createHoneycombBlock(jsPsych) {
   return honeycombBlock;
 }
 
-export { createHoneycombBlock };
+function createTutorialTrial(jsPsych) {
+  const fixation = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<div style="font-size:60px;">+</div>',
+    choices: "NO_KEYS",
+    trial_duration: 1000,
+    data: {
+      task: "fixation",
+    },
+  };
+  const videoTrial = {
+    type: jsPsychVideoKeyboardResponse,
+    // Display a stimulus passed as a timeline variable
+    stimulus: jsPsych.timelineVariable("stimulus"),
+    choices: [" ", "Enter"],
+    trial_ends_after_video: true,
+    response_ends_trial: false,
+  };
+
+  const choiceTrial = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: function () {
+      let question = "<p>What color was the ball at the end of the video?<p>";
+      let choices = `
+              <div style='text-align: center;'>
+                  <span style='color: red; margin-right: 15px;'  >(1) Red  <br></span>
+                  <span style='color: green; margin-right: 15px;'>(2) Green<br></span>
+                  <span style='color: blue;'                     >(3) Blue <br></span>
+              </div>`;
+      return "<div>" + question + choices + "</div>";
+    },
+    trial_duration: 10000,
+    choices: ["1", "2", "3"],
+    response_ends_trial: true,
+    data: {
+      task: "response",
+      correct_response: jsPsych.timelineVariable("correct_response"),
+    },
+    on_finish: function (data) {
+      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+      console.log(data.correct);
+    },
+  };
+
+  const trial_videos = [
+    { stimulus: ["assets/videos/examples/ex_1_red.mp4"], correct_response: "1" },
+    { stimulus: ["assets/videos/examples/ex_5_green.mp4"], correct_response: "2" },
+    { stimulus: ["assets/videos/examples/ex_7_blue.mp4"], correct_response: "3" },
+    { stimulus: ["assets/videos/examples/ex_10_green.mp4"], correct_response: "2" },
+    { stimulus: ["assets/videos/examples/ex_2_red.mp4"], correct_response: "1" },
+  ];
+
+  const timeline = {
+    timeline: [fixation, videoTrial, fixation, choiceTrial],
+    timeline_variables: trial_videos,
+    randomize_order: true, //shuffle videos within blocks
+  };
+
+  return timeline;
+}
+
+export { createHoneycombBlock, createTutorialTrial };

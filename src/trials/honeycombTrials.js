@@ -44,8 +44,18 @@ const instructionsTrial = {
 
       return div(instructionsMarkup);
     }),
-    p(honeycombLanguage.instructions.next),
+
+    process.env.REACT_APP_MODE === "tutorial"
+      ? p(honeycombLanguage.instructions.nextTutorial)
+      : p(honeycombLanguage.instructions.next),
   ],
+  show_clickable_nav: true,
+  post_trial_gap: 500,
+};
+
+const endTutorialTrial = {
+  type: instructionsResponse,
+  pages: [p(honeycombLanguage.endTutorial.instructions)],
   show_clickable_nav: true,
   post_trial_gap: 500,
 };
@@ -91,4 +101,11 @@ const finishTrial = showMessage(config, {
   message: honeycombLanguage.finish,
 });
 
-export { createDebriefTrial, finishTrial, instructionsTrial, preloadTrial, welcomeTrial };
+export {
+  createDebriefTrial,
+  finishTrial,
+  instructionsTrial,
+  preloadTrial,
+  welcomeTrial,
+  endTutorialTrial,
+};

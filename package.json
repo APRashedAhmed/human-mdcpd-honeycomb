@@ -81,6 +81,7 @@
     "dev:clinic": "dotenv -e env/.env.clinic npm run dev",
     "dev:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run dev",
     "dev:turk-prolific": "dotenv -e env/.env.turk-prolific npm run dev",
+    "dev:tutorial": "dotenv -e env/.env.tutorial npm run dev",
     "prebuild": "electron-rebuild",
     "build": "react-scripts build",
     "build:home": "dotenv -e env/.env.home npm run build",
