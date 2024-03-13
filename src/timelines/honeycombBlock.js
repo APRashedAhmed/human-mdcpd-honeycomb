@@ -86,12 +86,46 @@ async function createHoneycombBlock(jsPsych) {
   // TODO #332: Add photodiode and event marker code here
   const videoTrial = {
     type: jsPsychVideoKeyboardResponse,
-    // Display a stimulus passed as a timeline variable
     stimulus: jsPsych.timelineVariable("stimulus"),
-    choices: [" ", "Enter"],
+    choices: [" "], // Allow space just to keep structure; adjust as needed
     trial_ends_after_video: true,
     response_ends_trial: false,
+    on_start: function (trial) {
+      const startTime = performance.now();
+      trial.eventHandler = handleSpacebarPress(startTime);
+      // Attach event listener to log spacebar keypresses
+      window.addEventListener("keydown", trial.eventHandler);
+    },
+    on_finish: function (trial) {
+      // Remove event listener when trial finishes
+      window.removeEventListener("keydown", trial.eventHandler);
+
+      // Optionally process logged keypresses here or leave them as part of the trial data
+    },
   };
+
+  // Define the event handler function
+  function handleSpacebarPress(startTime) {
+    return function (event) {
+      if (event.code === "Space") {
+        // Log the spacebar press time or any other relevant information
+        const timePressed = jsPsych.getTotalTime(); // Get the time since the start of the experiment
+        const nodeID = jsPsych.getCurrentTimelineNodeID();
+        const trial = jsPsych.getCurrentTrial();
+        jsPsych.data.get().push({
+          response: "spacebar-press",
+          time_elapsed: timePressed,
+          internal_node_id: nodeID,
+          stimulus: trial.stimulus,
+          trial_type: trial.type.info.name,
+          rt: performance.now() - startTime,
+        });
+
+        // Prevent default action to stop any side effects (optional)
+        event.preventDefault();
+      }
+    };
+  }
 
   const choiceTrial = {
     type: jsPsychHtmlKeyboardResponse,
