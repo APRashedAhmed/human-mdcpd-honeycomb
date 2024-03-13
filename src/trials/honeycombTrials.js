@@ -87,7 +87,7 @@ const createDebriefTrial = (jsPsych) => ({
       debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
     );
     const completeMarkup = p(debriefLanguage.complete);
-    // jsPsych.data.get().localSave("json", "tutorial_experiment.json");
+
     jsPsych.data.get().localSave("csv", "tutorial_experiment.csv");
 
     // Display the accuracy, reaction time, and complete message as 3 paragraphs in a row
