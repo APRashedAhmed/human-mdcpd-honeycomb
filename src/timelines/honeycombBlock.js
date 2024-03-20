@@ -84,25 +84,32 @@ async function createHoneycombBlock(jsPsych) {
    * Note that the trial calculates and saves if the user responded correctly on trial_finish
    */
   // TODO #332: Add photodiode and event marker code here
-  const videoTrial = {
+  let videoTrial = {
     type: jsPsychVideoKeyboardResponse,
     stimulus: jsPsych.timelineVariable("stimulus"),
     choices: [" "], // Allow space just to keep structure; adjust as needed
     trial_ends_after_video: true,
     response_ends_trial: false,
-    on_start: function (trial) {
+    on_start: function () {
+      console.log(jsPsych.timelineVariable("color_change_timestamps"));
+    },
+  };
+
+  if (process.env.REACT_APP_MODE === "spacebar") {
+    //if spacebar mode
+    videoTrial.on_start = function (trial) {
       const startTime = performance.now();
       trial.eventHandler = handleSpacebarPress(startTime);
       // Attach event listener to log spacebar keypresses
       window.addEventListener("keydown", trial.eventHandler);
-    },
-    on_finish: function (trial) {
+    };
+
+    videoTrial.on_finish = function (trial) {
       // Remove event listener when trial finishes
       window.removeEventListener("keydown", trial.eventHandler);
-
       // Optionally process logged keypresses here or leave them as part of the trial data
-    },
-  };
+    };
+  }
 
   // Define the event handler function
   function handleSpacebarPress(startTime) {
@@ -149,6 +156,7 @@ async function createHoneycombBlock(jsPsych) {
     on_finish: function (data) {
       data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
       console.log(data.correct);
+      jsPsych.data.get().localSave("csv", "tutorial_experiment.csv");
     },
   };
 
