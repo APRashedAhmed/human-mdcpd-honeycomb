@@ -18,8 +18,13 @@ To get started running a local development server, you'll need to run these few 
 
 This should start a live development server where you can freely make updates/changes which are reflected immediately
 
-You can also run a different version of the experiment with a short **tutorial** at the beginning
-consisting of 5 videos. To run this, it's mostly the same:
+To run an alternative version of the experiment that requires you to click the spacebar on color changes, use the following commands:
+
+`cd src` + `node server.js` _(assuming you're in the root directory)_
+
+`npm run dev:spacebar` _(assuming you're in root directory)_
+
+To run an alternative version of the experiment with a short **tutorial** at the beginning consisting of 5 videos, use the following commands:
 
 `cd src` + `node server.js` _(assuming you're in the root directory)_
 
