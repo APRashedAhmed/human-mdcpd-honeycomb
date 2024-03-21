@@ -44,6 +44,7 @@ const instructionsTrial = {
 
       return div(instructionsMarkup);
     }),
+    process.env.REACT_APP_MODE === "spacebar" && p(honeycombLanguage.instructions.spacebar),
 
     process.env.REACT_APP_MODE === "tutorial"
       ? p(honeycombLanguage.instructions.nextTutorial)

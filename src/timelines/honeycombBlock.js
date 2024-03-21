@@ -98,6 +98,7 @@ async function createHoneycombBlock(jsPsych) {
   if (process.env.REACT_APP_MODE === "spacebar") {
     //if spacebar mode
     videoTrial.on_start = function (trial) {
+      console.log(jsPsych.timelineVariable("color_change_timestamps"));
       const startTime = performance.now();
       trial.eventHandler = handleSpacebarPress(startTime);
       // Attach event listener to log spacebar keypresses
