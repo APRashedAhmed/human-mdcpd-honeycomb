@@ -108,7 +108,6 @@ async function createHoneycombBlock(jsPsych) {
     videoTrial.on_finish = function (trial) {
       // Remove event listener when trial finishes
       window.removeEventListener("keydown", trial.eventHandler);
-      // Optionally process logged keypresses here or leave them as part of the trial data
     };
   }
 
@@ -177,7 +176,7 @@ async function createHoneycombBlock(jsPsych) {
     }
     blockTimeline.push(videoProcedure);
   }
-  // blockTimeline = [blockTimeline[2]];
+
   const honeycombBlock = {
     timeline: blockTimeline,
   };
@@ -185,6 +184,7 @@ async function createHoneycombBlock(jsPsych) {
   return honeycombBlock;
 }
 
+//**************************************************************************//
 function createTutorialTrial(jsPsych) {
   const fixation = {
     type: jsPsychHtmlKeyboardResponse,
