@@ -25,7 +25,7 @@ const readAndFilterCsv = (csvFilePath) => {
 };
 
 app.get("/api/videos", async (req, res) => {
-  const directoryPath = path.join(__dirname, "..", "public", "assets", "videos", "hbb_dataset_240409_113427");
+  const directoryPath = path.join(__dirname, "..", "public", "assets", "videos", "hbb_dataset_240409_121323");
   let block_videos = [];
   const blocks = await fsp.readdir(directoryPath);
 
