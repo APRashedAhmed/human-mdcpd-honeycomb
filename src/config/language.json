@@ -12,13 +12,18 @@
       "welcome": "Welcome to the experiment. Press any key to begin.",
       "instructions": {
         "read": "Please read the following instructions carefully.",
-        "circle": "In this experiment, a circle will appear in the center of the screen.",
+        "details": "In this experiment you will watch a video of a ball bouncing around the screen that changes color, however its color gets hidden in the middle region. You will be asked to report the final color of the ball at the end of the video.",
         "example": {
-          "start": "If the circle is ",
-          "middle": ", press the letter ",
+          "start": "If the color of the ball is ",
+          "middle": ", press the key ",
           "end": " on the keyboard as fast as you can."
         },
+        "spacebar": "When watching a video, if you see a color change or think one is about to occur, press the spacebar",
+        "nextTutorial": "Click next to begin a short tutorial",
         "next": "Click next to begin."
+      },
+      "endTutorial": {
+        "instructions": "This is the end of the tutorial, click next to begin"
       },
       "debrief": {
         "accuracy": {
@@ -29,6 +34,7 @@
           "start": "Your average response time was ",
           "end": "ms."
         },
+        "completeBlock": "Press enter to move onto the next block!",
         "complete": "Press any key to complete the experiment. Thank you!"
       },
       "finish": "This experiment has ended."

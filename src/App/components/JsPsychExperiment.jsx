@@ -30,6 +30,7 @@ export default function JsPsychExperiment({
     const jsPsych = initJsPsych({
       // Combine necessary Honeycomb options with custom ones (src/timelines/main.js)
       ...jsPsychOptions,
+      show_progress_bar: true,
       display_element: EXPERIMENT_ID,
       on_data_update: (data) => {
         jsPsychOptions.on_data_update && jsPsychOptions.on_data_update(data); // Call custom on_data_update function (if provided)
@@ -53,8 +54,10 @@ export default function JsPsychExperiment({
   }, [studyID, participantID]);
 
   /** Build and run the experiment timeline */
-  React.useEffect(() => {
-    const timeline = buildTimeline(jsPsych, studyID, participantID);
+  React.useEffect(async () => {
+    console.log("useEffect");
+    const timeline = await buildTimeline(jsPsych, studyID, participantID);
+    console.log(timeline);
     jsPsych.run(timeline);
   }, [jsPsych]);
 
