@@ -156,6 +156,10 @@ async function createHoneycombBlock(jsPsych) {
     on_finish: function (data) {
       data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
       console.log(data.correct);
+      var proportion_complete = jsPsych.getProgressBarCompleted();
+      console.log(proportion_complete);
+      jsPsych.setProgressBar(proportion_complete + 1 / 275);
+
       // jsPsych.data.get().localSave("csv", "tutorial_experiment.csv");
     },
   };

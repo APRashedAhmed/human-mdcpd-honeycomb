@@ -31,6 +31,7 @@ export default function JsPsychExperiment({
       // Combine necessary Honeycomb options with custom ones (src/timelines/main.js)
       ...jsPsychOptions,
       show_progress_bar: true,
+      auto_update_progress_bar: false,
       display_element: EXPERIMENT_ID,
       on_data_update: (data) => {
         jsPsychOptions.on_data_update && jsPsychOptions.on_data_update(data); // Call custom on_data_update function (if provided)

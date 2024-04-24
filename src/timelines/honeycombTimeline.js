@@ -16,6 +16,7 @@ import { createHoneycombBlock, createTutorialTrial } from "./honeycombBlock";
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
  */
 async function createHoneycombTimeline(jsPsych) {
+  // jsPsych.setProgressBar(0);
   const honeycombTrials = await createHoneycombBlock(jsPsych);
   const tutorialTrial = createTutorialTrial(jsPsych);
   const debriefTrial = createDebriefTrial(jsPsych);
