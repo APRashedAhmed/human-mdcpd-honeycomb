@@ -156,7 +156,7 @@ async function createHoneycombBlock(jsPsych) {
     on_finish: function (data) {
       data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
       console.log(data.correct);
-      jsPsych.data.get().localSave("csv", "tutorial_experiment.csv");
+      // jsPsych.data.get().localSave("csv", "tutorial_experiment.csv");
     },
   };
 
