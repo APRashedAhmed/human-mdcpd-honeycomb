@@ -32,6 +32,6 @@ Brewfile.lock.json
 **/participant_responses
 
 # Misc
-.env
+# .env
 .DS_Store
 psiturkit/*_turk

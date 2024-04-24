@@ -19,8 +19,8 @@
           "end": " on the keyboard as fast as you can."
         },
         "spacebar": "When watching a video, if you see a color change or think one is about to occur, press the spacebar",
-        "next": "Click next to begin.",
-        "nextTutorial": "Click next to begin a short tutorial"
+        "nextTutorial": "Click next to begin a short tutorial",
+        "next": "Click next to begin."
       },
       "endTutorial": {
         "instructions": "This is the end of the tutorial, click next to begin"
