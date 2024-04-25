@@ -5,7 +5,7 @@ import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response"
 
 // import { config, taskSettings } from "../config/main";
 import { language } from "../config/main";
-import { p } from "../lib/markup/tags";
+import { p, b } from "../lib/markup/tags";
 
 // import { taskSettings } from "../config/main";
 
@@ -51,10 +51,10 @@ async function createHoneycombBlock(jsPsych) {
       const debriefLanguage = honeycombLanguage.debrief;
 
       const accuracyMarkup = p(
-        debriefLanguage.accuracy.start + accuracy + debriefLanguage.accuracy.end
+        debriefLanguage.accuracy.start + b(accuracy) + debriefLanguage.accuracy.end
       );
       const reactionTimeMarkup = p(
-        debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
+        debriefLanguage.reactionTime.start + b(reactionTime) + debriefLanguage.reactionTime.end
       );
       const completeMarkup = p(debriefLanguage.completeBlock);
       return accuracyMarkup + reactionTimeMarkup + completeMarkup;
@@ -140,9 +140,9 @@ async function createHoneycombBlock(jsPsych) {
       let question = "<p>What color was the ball at the end of the video?<p>";
       let choices = `
               <div style='text-align: center;'>
-                  <span style='color: red; margin-right: 15px;'  >(1) Red  <br></span>
-                  <span style='color: green; margin-right: 15px;'>(2) Green<br></span>
-                  <span style='color: blue;'                     >(3) Blue <br></span>
+                  <span style='color: red; margin-right: 15px;'  >(1) <b>Red</b>  <br></span>
+                  <span style='color: green; margin-right: 15px;'>(2) <b>Green</b><br></span>
+                  <span style='color: blue;'                     >(3) <b>Blue</b> <br></span>
               </div>`;
       return "<div>" + question + choices + "</div>";
     },
