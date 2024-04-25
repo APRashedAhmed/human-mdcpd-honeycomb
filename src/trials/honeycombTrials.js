@@ -12,8 +12,9 @@ const honeycombLanguage = language.trials.honeycomb;
  * Trial that displays a welcome message and waits for the participant to press a key
  */
 const welcomeTrial = {
-  type: htmlKeyboardResponse,
-  stimulus: p(honeycombLanguage.welcome),
+  type: instructionsResponse,
+  pages: [p(honeycombLanguage.welcome)],
+  show_clickable_nav: true,
 };
 
 /**
