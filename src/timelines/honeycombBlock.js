@@ -233,6 +233,37 @@ function createTutorialTrial(jsPsych) {
     },
   };
 
+  const getColor = (string) => {
+    let color;
+    switch (string) {
+      case "1":
+        color = "red";
+        break;
+      case "2":
+        color = "green";
+        break;
+      case "3":
+        color = "blue";
+        break;
+    }
+    return color;
+  };
+
+  const answerTrial = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: function () {
+      const correct_color = getColor(jsPsych.timelineVariable("correct_response"));
+      const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].response);
+      console.log(toString(jsPsych.data.getLastTrialData().trials[0].response, "hi"));
+      console.log(jsPsych.data.getLastTrialData());
+      let correct_answer = `<p>The correct answer was <span style='color: ${correct_color}'> ${correct_color}<span>`;
+      let user_answer = `<p>You chose <span style='color: ${user_color}'> ${user_color}<span>`;
+      let spacebar = "<p>Press the spacebar to continue";
+      return "<div>" + correct_answer + user_answer + spacebar + "</div>";
+    },
+    choices: [" "],
+  };
+
   const trial_videos = [
     { stimulus: ["assets/videos/examples/ex_1_red.mp4"], correct_response: "1" },
     { stimulus: ["assets/videos/examples/ex_5_green.mp4"], correct_response: "2" },
@@ -242,7 +273,7 @@ function createTutorialTrial(jsPsych) {
   ];
 
   const timeline = {
-    timeline: [fixation, videoTrial, fixation, choiceTrial],
+    timeline: [fixation, videoTrial, fixation, choiceTrial, answerTrial],
     timeline_variables: trial_videos,
     randomize_order: true, //shuffle videos within blocks
   };
