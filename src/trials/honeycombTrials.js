@@ -95,6 +95,9 @@ const createDebriefTrial = (jsPsych) => ({
     // Display the accuracy, reaction time, and complete message as 3 paragraphs in a row
     return accuracyMarkup + reactionTimeMarkup + completeMarkup;
   },
+  data: {
+    task: "Final Debrief",
+  },
 });
 
 /** Trial that displays a completion message for 5 seconds */
