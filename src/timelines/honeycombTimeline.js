@@ -1,13 +1,13 @@
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
 import {
   createDebriefTrial,
-  endTutorialTrial,
+  endWalkthroughTrial,
   finishTrial,
   instructionsTrial,
   // preloadTrial,
   welcomeTrial,
 } from "../trials/honeycombTrials";
-import { createHoneycombBlock, createTutorialTrial } from "./honeycombBlock";
+import { createHoneycombBlock, createWalkthroughTrial, createTutorialTrial } from "./honeycombBlock";
 
 /**
  * This timeline builds the example reaction time task from the jsPsych tutorial.
@@ -16,8 +16,10 @@ import { createHoneycombBlock, createTutorialTrial } from "./honeycombBlock";
  * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
  */
 async function createHoneycombTimeline(jsPsych) {
+  // jsPsych.setProgressBar(0);
   const honeycombTrials = await createHoneycombBlock(jsPsych);
-  const tutorialTrial = createTutorialTrial(jsPsych);
+  const walkthroughTrial = createWalkthroughTrial(jsPsych);
+  const tutorialTrial = createTutorialTrial(jsPsych)
   const debriefTrial = createDebriefTrial(jsPsych);
   const timeline =
     process.env.REACT_APP_MODE === "tutorial"
@@ -26,8 +28,9 @@ async function createHoneycombTimeline(jsPsych) {
           enterFullscreen,
           // preloadTrial,
           instructionsTrial,
+          walkthroughTrial,
+          endWalkthroughTrial,
           tutorialTrial,
-          endTutorialTrial,
           honeycombTrials,
           debriefTrial,
           finishTrial,

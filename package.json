@@ -1,18 +1,18 @@
 {
-  "name": "human-mdcpd",
-  "description": "All-in-one task starter app with jsPsych + React + Electron + psiturk ",
+  "name": "human-mdcpd-honeycomb",
+  "description": "Human multidimensional changepoint detection task",
   "author": {
-    "name": "Brown CCV",
-    "email": "ccv-bot@brown.edu",
-    "url": "https://ccv.brown.edu"
+    "name": "Nassar Lab",
+    "email": "abdullah_rashed_ahmed@brown.edu",
+    "url": "https://sites.brown.edu/mattlab/"
   },
   "version": "3.2.6",
-  "honeycombVersion": "",
+  "honeycombVersion": "3.2.6",
   "license": "MIT",
   "private": true,
   "main": "public/electron.js",
   "homepage": ".",
-  "repository": "https://github.com/brown-ccv/honeycomb",
+  "repository": "https://github.com/sliao2025/human-mdcpd-honeycomb/",
   "dependencies": {
     "@brown-ccv/behavioral-task-trials": "^2.0.0",
     "@fortawesome/fontawesome-free": "^6.4.2",
@@ -30,7 +30,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git",
     "execa": "^8.0.1",
-    "firebase": "^10.8.1",
+    "firebase": "^10.11.0",
     "fs-extra": "^11.1.1",
     "jquery": "^3.4.1",
     "jspsych": "^7.2.3",
@@ -60,6 +60,7 @@
     "firebase-tools": "^12.4.7",
     "husky": "^8.0.3",
     "lint-staged": "^15.0.2",
+    "prettier": "3.2.5",
     "wait-on": "^7.2.0"
   },
   "scripts": {
