@@ -55,9 +55,9 @@ const instructionsTrial = {
   post_trial_gap: 500,
 };
 
-const endTutorialTrial = {
+const endWalkthroughTrial = {
   type: instructionsResponse,
-  pages: [p(honeycombLanguage.endTutorial.instructions)],
+  pages: [p(honeycombLanguage.endWalkthrough.instructions)],
   show_clickable_nav: true,
   post_trial_gap: 500,
 };
@@ -112,5 +112,5 @@ export {
   instructionsTrial,
   preloadTrial,
   welcomeTrial,
-  endTutorialTrial,
+  endWalkthroughTrial,
 };
