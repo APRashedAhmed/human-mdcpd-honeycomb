@@ -12,8 +12,9 @@ const honeycombLanguage = language.trials.honeycomb;
  * Trial that displays a welcome message and waits for the participant to press a key
  */
 const welcomeTrial = {
-  type: htmlKeyboardResponse,
-  stimulus: p(honeycombLanguage.welcome),
+  type: instructionsResponse,
+  pages: [p(honeycombLanguage.welcome)],
+  show_clickable_nav: true,
 };
 
 /**
@@ -54,9 +55,9 @@ const instructionsTrial = {
   post_trial_gap: 500,
 };
 
-const endTutorialTrial = {
+const endWalkthroughTrial = {
   type: instructionsResponse,
-  pages: [p(honeycombLanguage.endTutorial.instructions)],
+  pages: [p(honeycombLanguage.endWalkthrough.instructions)],
   show_clickable_nav: true,
   post_trial_gap: 500,
 };
@@ -94,6 +95,9 @@ const createDebriefTrial = (jsPsych) => ({
     // Display the accuracy, reaction time, and complete message as 3 paragraphs in a row
     return accuracyMarkup + reactionTimeMarkup + completeMarkup;
   },
+  data: {
+    task: "Final Debrief",
+  },
 });
 
 /** Trial that displays a completion message for 5 seconds */
@@ -108,5 +112,5 @@ export {
   instructionsTrial,
   preloadTrial,
   welcomeTrial,
-  endTutorialTrial,
+  endWalkthroughTrial,
 };

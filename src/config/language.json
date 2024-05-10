@@ -19,11 +19,11 @@
           "end": " on the keyboard as fast as you can."
         },
         "spacebar": "When watching a video, if you see a color change or think one is about to occur, press the spacebar",
-        "nextTutorial": "Click next to begin a short tutorial",
+        "nextTutorial": "Click next to begin a short walkthrough",
         "next": "Click next to begin."
       },
-      "endTutorial": {
-        "instructions": "This is the end of the tutorial, click next to begin"
+      "endWalkthrough": {
+        "instructions": "This is the end of the walkthrough, click next to practice on a few tutorial videos"
       },
       "debrief": {
         "accuracy": {
