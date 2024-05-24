@@ -203,73 +203,54 @@ function createWalkthroughTrial(jsPsych) {
     type: jsPsychVideoKeyboardResponse,
     // Display a stimulus passed as a timeline variable
     stimulus: jsPsych.timelineVariable("stimulus"),
-    choices: [" ", "Enter"],
-    trial_ends_after_video: true,
-    response_ends_trial: false,
+    choices: ["Enter"],
+    trial_ends_after_video: false,
+    controls: true,
+    response_ends_trial: true,
     prompt: function () {
-      return `<div style="position: fixed; top: 50%; left: 25%; transform: translate(-50%, -50%); color: black; font-size: 24px; z-index: 100;">
+      return `<div style="position: fixed; width: 200px; top: 50%; left: 25%; transform: translate(-50%, -50%); color: black; font-size: 24px; z-index: 100;">
                   ${jsPsych.timelineVariable("text")}
               </div>`;
     },
   };
 
-  const choiceTrial = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: function () {
-      let question = "<p>What color was the ball at the end of the video?<p>";
-      let choices = `
-              <div style='text-align: center;'>
-                  <span style='color: red; margin-right: 15px;'  >(1) Red  <br></span>
-                  <span style='color: green; margin-right: 15px;'>(2) Green<br></span>
-                  <span style='color: blue;'                     >(3) Blue <br></span>
-              </div>`;
-      return "<div>" + question + choices + "</div>";
-    },
-    trial_duration: 10000,
-    choices: ["1", "2", "3"],
-    response_ends_trial: true,
-    data: {
-      task: "response",
-      correct_response: jsPsych.timelineVariable("correct_response"),
-    },
-    on_finish: function (data) {
-      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
-      console.log(data.correct);
-    },
-  };
-
   const trial_videos = [
     {
-      stimulus: ["assets/videos/examples/ex_1_red.mp4"],
-      correct_response: "1",
-      text: "description",
-    },
-    {
-      stimulus: ["assets/videos/examples/ex_5_green.mp4"],
+      stimulus: ["assets/videos/tutorial_videos/no_gray_base_transitions_green.mp4"],
       correct_response: "2",
-      text: "description",
+      text: "The ball will change color when bouncing or randomly with certain \
+      probabilities. Each video in the task will have different probabilities \
+      and you will have to learn these to the best of your ability",
     },
     {
-      stimulus: ["assets/videos/examples/ex_7_blue.mp4"],
+      stimulus: ["assets/videos/tutorial_videos/no_gray_low_change_red.mp4"],
+      correct_response: "1",
+      text: "Some videos like this one will have a small number of color changes",
+    },
+    {
+      stimulus: ["assets/videos/tutorial_videos/no_gray_high_change_green.mp4"],
+      correct_response: "2",
+      text: "Other videos like this one will have more spontaneous color changes",
+    },
+    {
+      stimulus: ["assets/videos/tutorial_videos/gray_introduction_blue.mp4"],
       correct_response: "3",
-      text: "description",
+      text: "The actual task will have a gray zone in the middle where you won't\
+      be able to see the color. Some videos like this one will have the ball\
+      end within the gray zone ",
     },
     {
-      stimulus: ["assets/videos/examples/ex_10_green.mp4"],
-      correct_response: "2",
-      text: "description",
-    },
-    {
-      stimulus: ["assets/videos/examples/ex_2_red.mp4"],
+      stimulus: ["assets/videos/tutorial_videos/gray_outside_end_red.mp4"],
       correct_response: "1",
-      text: "description",
+      text: "Other videos like this one will have the ball end outside of the\
+      gray zone",
     },
   ];
 
   const timeline = {
-    timeline: [fixation, videoTrial, fixation, choiceTrial],
+    timeline: [fixation, videoTrial, fixation],
     timeline_variables: trial_videos,
-    randomize_order: true, //shuffle videos within blocks
+    randomize_order: false, //shuffle videos within blocks
   };
 
   return timeline;

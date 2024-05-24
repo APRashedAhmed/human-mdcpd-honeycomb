@@ -25,7 +25,40 @@ const readAndFilterCsv = (csvFilePath) => {
 };
 
 app.get("/api/videos", async (req, res) => {
-  const directoryPath = path.join(__dirname, "..", "public", "assets", "videos", "hbb_dataset_240409_121323");
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+  const randomInt = getRandomInt(5);
+  console.log(randomInt);
+  let dataset = null;
+  switch (randomInt) {
+    case 0:
+      dataset = "hbb_dataset_240502_180044";
+      break;
+    case 1:
+      dataset = "hbb_dataset_240502_181145";
+      break;
+    case 2:
+      dataset = "hbb_dataset_240502_181650";
+      break;
+    case 3:
+      dataset = "hbb_dataset_240502_182205";
+      break;
+    case 4:
+      dataset = "hbb_dataset_240502_182701";
+      break;
+  }
+  console.log(dataset);
+  const directoryPath = path.join(
+    __dirname,
+    "..",
+    "public",
+    "assets",
+    "videos",
+    "datasets",
+    dataset,
+    "videos"
+  );
   let block_videos = [];
   const blocks = await fsp.readdir(directoryPath);
 
