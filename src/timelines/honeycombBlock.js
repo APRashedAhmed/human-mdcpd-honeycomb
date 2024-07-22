@@ -335,36 +335,36 @@ function createWalkthroughTrial(jsPsych) {
 
   const trial_videos = [
     {
-      stimulus: ["assets/videos/examples/ex_1_red.mp4"],
-      correct_response: "1",
-      text: "description",
-    },
-    {
-      stimulus: ["assets/videos/examples/ex_5_green.mp4"],
+      stimulus: ["assets/videos/walkthrough/1_no_gray_base_transitions_green.mp4"],
       correct_response: "2",
-      text: "description",
+      text: "Ball transitions red -> green -> blue",
     },
     {
-      stimulus: ["assets/videos/examples/ex_7_blue.mp4"],
+      stimulus: ["assets/videos/walkthrough/2_no_gray_low_change_red.mp4"],
+      correct_response: "2",
+      text: "Sometimes it doesn't change often",
+    },
+    {
+      stimulus: ["assets/videos/walkthrough/3_no_gray_high_change_green.mp4"],
       correct_response: "3",
-      text: "description",
+      text: "Sometimes it changes a lot",
     },
     {
-      stimulus: ["assets/videos/examples/ex_10_green.mp4"],
+      stimulus: ["assets/videos/walkthrough/4_gray_outside_end_red.mp4"],
       correct_response: "2",
-      text: "description",
+      text: "Grayzone is present in the main task but ball can end outside of it",
     },
     {
-      stimulus: ["assets/videos/examples/ex_2_red.mp4"],
+      stimulus: ["assets/videos/walkthrough/5_gray_introduction_blue.mp4"],
       correct_response: "1",
-      text: "description",
+      text: "However, most trials will have the ball end inside it",
     },
   ];
 
   const timeline = {
     timeline: [fixation, videoTrial, fixation, choiceTrial],
     timeline_variables: trial_videos,
-    randomize_order: true, //shuffle videos within blocks
+    randomize_order: false,
   };
 
   return timeline;
