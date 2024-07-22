@@ -1,10 +1,13 @@
 import { showMessage } from "@brown-ccv/behavioral-task-trials";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import instructionsResponse from "@jspsych/plugin-instructions";
-import preloadResponse from "@jspsych/plugin-preload";
+import jsPsychPreload from '@jspsych/plugin-preload';
+
+// import preloadResponse from "@jspsych/plugin-preload";
 
 import { config, language, taskSettings } from "../config/main";
 import { div, p, b } from "../lib/markup/tags";
+import videoPaths from '../videoPaths.json';
 
 const honeycombLanguage = language.trials.honeycomb;
 
@@ -63,11 +66,19 @@ const endWalkthroughTrial = {
 };
 
 /** Trial that loads all of the stimulus images */
-const preloadTrial = {
-  type: preloadResponse,
-  message: p(language.prompts.settingUp),
-  images: taskSettings.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
-};
+var preloadTrial = {
+    type: jsPsychPreload,
+    video: videoPaths,
+    show_progress_bar: true,
+    auto_preload: true,    
+    message: 'Loading videos, please wait...',
+    error_message: 'Failed to load videos. Please check your connection and try again.'
+  };
+  
+//   type: preloadResponse,
+//   message: p(language.prompts.settingUp),
+//   images: taskSettings.honeycomb.timeline_variables.map(({ stimulus }) => stimulus),
+// };
 // TODO #281: Function for preloading all files in public/images?
 
 /** Trial that calculates and displays some results of the session  */

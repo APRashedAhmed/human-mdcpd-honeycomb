@@ -4,7 +4,7 @@ import {
   endWalkthroughTrial,
   finishTrial,
   instructionsTrial,
-  // preloadTrial,
+  preloadTrial,
   welcomeTrial,
 } from "../trials/honeycombTrials";
 import { createHoneycombBlock, createWalkthroughTrial, createTutorialTrial } from "./honeycombBlock";
@@ -26,7 +26,7 @@ async function createHoneycombTimeline(jsPsych) {
       ? [
           welcomeTrial,
           enterFullscreen,
-          // preloadTrial,
+          preloadTrial,
           instructionsTrial,
           walkthroughTrial,
           endWalkthroughTrial,
@@ -39,7 +39,7 @@ async function createHoneycombTimeline(jsPsych) {
       : [
           welcomeTrial,
           enterFullscreen,
-          // preloadTrial,
+          preloadTrial,
           instructionsTrial,
           honeycombTrials,
           debriefTrial,

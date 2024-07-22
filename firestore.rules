@@ -1,17 +1,19 @@
 rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /participant_responses/{study_id}/participants/{participant_id} {
-      allow create, read:
-      if
-	// Creates the participant if the study_id is registered in the "all_studies" document
-	study_id in get(/databases/$(database)/documents/registered_studies/all_studies).data.registered_studies;
-      // experimentID must be in the data subcollection
-      match /data/{document=**} {
-	// create, read, or update experiment data if study_id is registered in the "all_studies" document
-	// allow create, read, update: if study_id in get(/databases/$(database)/documents/registered_studies/all_studies).data.registered_studies;
-	allow create, read, update: if true
-      }
-    }
-  }
-}
+service cloud.firestore { match /databases/{database}/documents { match /{document=**} { allow read, write: if true; } } }
+
+// service cloud.firestore {
+//   match /databases/{database}/documents {
+//     match /participant_responses/{study_id}/participants/{participant_id} {
+//       allow create, read:
+//       if
+// 	// Creates the participant if the study_id is registered in the "all_studies" document
+// 	study_id in get(/databases/$(database)/documents/registered_studies/all_studies).data.registered_studies;
+//       // experimentID must be in the data subcollection
+//       match /data/{document=**} {
+// 	// create, read, or update experiment data if study_id is registered in the "all_studies" document
+// 	// allow create, read, update: if study_id in get(/databases/$(database)/documents/registered_studies/all_studies).data.registered_studies;
+// 	allow create, read, update: if true
+//       }
+//     }
+//   }
+// }
