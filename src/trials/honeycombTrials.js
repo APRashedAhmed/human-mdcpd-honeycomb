@@ -3,11 +3,8 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import instructionsResponse from "@jspsych/plugin-instructions";
 import jsPsychPreload from '@jspsych/plugin-preload';
 
-// import preloadResponse from "@jspsych/plugin-preload";
-
 import { config, language, taskSettings } from "../config/main";
 import { div, p, b } from "../lib/markup/tags";
-import videoPaths from '../videoPaths.json';
 
 const honeycombLanguage = language.trials.honeycomb;
 
@@ -68,7 +65,6 @@ const endWalkthroughTrial = {
 /** Trial that loads all of the stimulus images */
 var preloadTrial = {
     type: jsPsychPreload,
-    video: videoPaths,
     show_progress_bar: true,
     auto_preload: true,    
     message: 'Loading videos, please wait...',
