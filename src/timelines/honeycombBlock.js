@@ -6,7 +6,7 @@ import Papa from 'papaparse';
 // import { fixation } from "@brown-ccv/behavioral-task-trials";
 
 // import { config, taskSettings } from "../config/main";
-import { language } from "../config/main";
+import { language, taskSettings } from "../config/main";
 import { p, b } from "../lib/markup/tags";
 import videoPaths from '../videoPaths.json';
 
@@ -80,6 +80,7 @@ async function createHoneycombBlock(jsPsych) {
 	stimulus: [filePath],
 	correct_response: correct_resp,
         csv: csvFilePath,
+	
       };
 
 	block_videos[block - 1].push(videoObject);
@@ -220,7 +221,7 @@ async function createHoneycombBlock(jsPsych) {
               </div>`;
       return "<div>" + question + choices + "</div>";
     },
-    trial_duration: 10000,
+    trial_duration: taskSettings.choiceTrial.trial_duration,
     choices: ["1", "2", "3"],
     response_ends_trial: true,
     data: {
@@ -243,34 +244,35 @@ async function createHoneycombBlock(jsPsych) {
   let blockTimeline = [];
   
   for (const [index, videoBlock] of videoBlocks.entries()) {
-    var trial_videos = videoBlock;
-    const videoProcedure = {
-      timeline: [fixation, videoTrial, fixation, choiceTrial],
-      timeline_variables: trial_videos,
-      randomize_order: true, //shuffle videos within blocks
-      on_timeline_start: async () => { // Load csv timestamps before each block
-        const csvPromises = trial_videos.map(video => readAndFilterCsv(video.csv));
-        const filteredTimestampsArray = await Promise.all(csvPromises);
-        for (let i = 0; i < trial_videos.length; i++) {
-          trial_videos[i].color_change_timestamps = filteredTimestampsArray[i];
-        }
-      }
-    };
+
+    // Add the debrief trial for all blocks after the first one
     if (index !== 0) {
       blockTimeline.push(debriefTrial(jsPsych));
-    }
-      // for (const videoTrial of trial_videos.entries()){
-      // 	  var trial_video = videoTrial.stimulus
-      // 	  console.log(trial_video, "trial_video");      
-    // }
+    }    
+
+    // Add a preload trial before beginning each block
     var preloadTrial = {
 	type: jsPsychPreload,
-	video: trial_videos,
+	video: videoBlock,
 	show_progress_bar: true,
 	message: 'Loading videos, please wait...',
 	error_message: 'Failed to load videos. Please check your connection and try again.'
     };
     blockTimeline.push(preloadTrial);
+
+    // Add the main block of trials
+    const videoProcedure = {
+      timeline: [fixation, videoTrial, fixation, choiceTrial],
+      timeline_variables: videoBlock,
+      randomize_order: true, //shuffle videos within blocks
+      on_timeline_start: async () => { // Load csv timestamps before each block
+        const csvPromises = videoBlock.map(video => readAndFilterCsv(video.csv));
+        const filteredTimestampsArray = await Promise.all(csvPromises);
+        for (let i = 0; i < videoBlock.length; i++) {
+          videoBlock[i].color_change_timestamps = filteredTimestampsArray[i];
+        }
+      }
+    };
     blockTimeline.push(videoProcedure);
   }
 
