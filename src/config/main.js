@@ -72,6 +72,9 @@ let taskSettings = {
     default_duration: 1000,
     randomize_duration: false,
   },
+  choiceTrial: {
+    trial_duration: 10000,
+  }
 };
 try {
   taskSettings = _.merge(
