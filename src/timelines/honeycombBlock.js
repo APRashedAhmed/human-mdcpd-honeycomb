@@ -1,11 +1,13 @@
 import jsPsychVideoKeyboardResponse from "@jspsych/plugin-video-keyboard-response";
 import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import Papa from 'papaparse';
 
 // import { fixation } from "@brown-ccv/behavioral-task-trials";
 
 // import { config, taskSettings } from "../config/main";
 import { language } from "../config/main";
 import { p, b } from "../lib/markup/tags";
+import videoPaths from '../videoPaths.json';
 
 // import { taskSettings } from "../config/main";
 
@@ -13,18 +15,104 @@ async function createHoneycombBlock(jsPsych) {
   // const { fixation: fixationSettings } = taskSettings;
   const honeycombLanguage = language.trials.honeycomb;
 
-  const fetchVideoData = async () => {
-    try {
-      // Update the server URL to the one you're using (e.g., http://localhost:3000 if that's where your server is running)
-      const response = await fetch("http://localhost:3001/api/videos");
-      console.log(response, "response");
-      const data = await response.json();
-      // Use the data.videos array as needed in your application
-      return data.videos;
-    } catch (error) {
-      console.error("Error fetching video data:", error);
-    }
+  const readAndFilterCsv = (csvFilePath) => {
+    return new Promise((resolve, reject) => {
+      fetch(csvFilePath)
+	.then(response => response.text())
+	.then(csvText => {
+	  Papa.parse(csvText, {
+	    header: true,
+	    complete: (results) => {
+	      const colorChangeTimestamps = results.data;
+	      // Filter out empty rows
+	      const nonEmptyTimestamps = colorChangeTimestamps.filter(
+		(timeStamp) => Object.keys(timeStamp).some(key => timeStamp[key].trim() !== "")
+	      );
+	      // Apply the desired filter
+	      const filteredTimestamps = nonEmptyTimestamps.filter(
+		(timeStamp) => timeStamp["Color Changed"] !== "False"
+	      );
+	      resolve(filteredTimestamps);
+	    },
+	    error: (error) => {
+	      reject(error);
+	    }
+	  });
+	})
+	.catch(error => reject(error));
+    });
   };
+  
+  const generateTrialMetadata = async () => {
+    let block_videos = [];
+
+    for (let filePath of videoPaths) {
+      filePath = filePath.split("public/")[1];
+      const pathParts = filePath.split('/');
+      const block = parseInt(pathParts[pathParts.length - 3].replace('block_', ''), 10);
+      const fileName = pathParts[pathParts.length - 1];
+
+      // Check if the current length of block_videos is less than the current block number
+      while (block_videos.length < block) {
+	  block_videos.push([]);
+      }
+
+      // Determine the correct response based on the file name
+      let correct_resp = "";
+        switch (fileName.charAt(fileName.length - 5)) {
+	case "d":
+	  correct_resp = "1";
+	  break;
+	case "n":
+	  correct_resp = "2";
+	  break;
+	case "e":
+	  correct_resp = "3";
+	  break;
+	default:
+	  break;
+	}
+ 
+      const csvFilePath = filePath.replace(/_(red|green|blue)\.mp4$/, "_color_change.csv");
+      const filteredTimestamps = await readAndFilterCsv(csvFilePath);
+
+      const videoObject = {
+	stimulus: [filePath],
+	correct_response: correct_resp,
+        csv: csvFilePath,
+        color_change_timestamps: filteredTimestamps,
+      };
+
+	block_videos[block - 1].push(videoObject);
+    };
+
+    // Shuffle function
+    const shuffle = (array) => {
+      for (let i = array.length - 1; i > 0; i--) {
+	const j = Math.floor(Math.random() * (i + 1));
+	[array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    };
+
+    return shuffle(block_videos);
+      
+  };    
+
+  // const fetchVideoData = async () => {
+  //   try {
+  //     // Update the server URL to the one you're using (e.g., http://localhost:3000 if that's where your server is running)
+  //     const response = await fetch("http://localhost:3001/api/videos");
+  //     console.log(response, "response");
+  //     const data = await response.json();
+  // 	// Use the data.videos array as needed in your application
+  //     console.log(data, "data");
+  //     return data.videos;
+  //   } catch (error) {
+  //     console.error("Error fetching video data:", error);
+  //   }
+  // };
+  
   /**
    * Displays a fixation dot at the center of the screen.
    *
@@ -164,12 +252,14 @@ async function createHoneycombBlock(jsPsych) {
     },
   };
 
-  const videoBlocks = await fetchVideoData(); //blocks already return shuffled
+  const videoBlocks = await generateTrialMetadata();
+  // const videoBlocks_old = await fetchVideoData(); //blocks already return shuffled
   console.log(videoBlocks, "videoBlocks");
+  // console.log(videoBlocks_old, "videoBlocks_old");
   let blockTimeline = [];
+  console.log(videoPaths, "videoPaths");  
   for (const [index, videoBlock] of videoBlocks.entries()) {
     var trial_videos = videoBlock;
-    console.log(trial_videos, "trial_videos");
     const videoProcedure = {
       timeline: [fixation, videoTrial, fixation, choiceTrial],
       timeline_variables: trial_videos,
@@ -178,6 +268,10 @@ async function createHoneycombBlock(jsPsych) {
     if (index !== 0) {
       blockTimeline.push(debriefTrial(jsPsych));
     }
+      // for (const videoTrial of trial_videos.entries()){
+      // 	  var trial_video = videoTrial.stimulus
+      // 	  console.log(trial_video, "trial_video");      
+      // }
     blockTimeline.push(videoProcedure);
   }
 

@@ -35,3 +35,5 @@ Brewfile.lock.json
 .env
 .DS_Store
 psiturkit/*_turk
+
+src/videoPaths.json
