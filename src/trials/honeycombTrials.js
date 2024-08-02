@@ -4,12 +4,12 @@ import instructionsResponse from "@jspsych/plugin-instructions";
 import jsPsychPreload from '@jspsych/plugin-preload';
 import jsPsychExternalHtml from '@jspsych/plugin-external-html';
 
-import { config, language, taskSettings } from "../config/main";
-// import { div, p, b, h1, h2, h3 } from "../lib/markup/tags";
-import { div, p, b } from "../lib/markup/tags";
+import { config, language } from "../config/main";
+// import { config, language, taskSettings } from "../config/main";
+// import { div, p, b } from "../lib/markup/tags";
+import { p } from "../lib/markup/tags";
 
 const honeycombLanguage = language.trials.honeycomb;
-// const consent = honeycombLanguage.welcome.consent
 
 /**
  * Trial that displays a welcome message and waits for the participant to press a key
@@ -17,7 +17,7 @@ const honeycombLanguage = language.trials.honeycomb;
 const welcomeTrial = {
   type: instructionsResponse,
   pages: [
-    p(honeycombLanguage.welcome.welcome)
+    p(honeycombLanguage.welcome)
   ],
   show_clickable_nav: true,
 };
@@ -27,7 +27,7 @@ var check_consent = function() {
         return true;
     }
     else {
-        alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
+        alert("If you wish to participate, you must check the 'I agree' box.");
         return false;
     }
 };
@@ -50,23 +50,23 @@ const instructionsTrial = {
   pages: [
     p(honeycombLanguage.instructions.read),
     p(honeycombLanguage.instructions.details),
-    // Add a page for very possible stimuli - displays the image and the correct response
-    ...taskSettings.honeycomb.timeline_variables.map(({ stimulus, correct_response }) => {
-      // Pull the color out of the file name
-      const color = stimulus;
+    // // Add a page for very possible stimuli - displays the image and the correct response
+    // ...taskSettings.honeycomb.timeline_variables.map(({ stimulus, correct_response }) => {
+    //   // Pull the color out of the file name
+    //   const color = stimulus;
 
-      // Build the instructions and image elements
-      const instructionsMarkup = p(
-        honeycombLanguage.instructions.example.start +
-          b(color, color ? { style: `color: ${color};` } : {}) +
-          honeycombLanguage.instructions.example.middle +
-          b(correct_response) +
-          honeycombLanguage.instructions.example.end
-      );
+    //   // Build the instructions and image elements
+    //   const instructionsMarkup = p(
+    //     honeycombLanguage.instructions.example.start +
+    //       b(color, color ? { style: `color: ${color};` } : {}) +
+    //       honeycombLanguage.instructions.example.middle +
+    //       b(correct_response) +
+    //       honeycombLanguage.instructions.example.end
+    //   );
 
-      return div(instructionsMarkup);
-    }),
-    // process.env.REACT_APP_MODE === "spacebar" && p(honeycombLanguage.instructions.spacebar),
+    //   return div(instructionsMarkup);
+    // }),
+    // // process.env.REACT_APP_MODE === "spacebar" && p(honeycombLanguage.instructions.spacebar),
 
     process.env.REACT_APP_MODE === "tutorial"
       ? p(honeycombLanguage.instructions.nextTutorial)
@@ -79,6 +79,13 @@ const instructionsTrial = {
 const endWalkthroughTrial = {
   type: instructionsResponse,
   pages: [p(honeycombLanguage.endWalkthrough.instructions)],
+  show_clickable_nav: true,
+  post_trial_gap: 500,
+};
+
+const endPracticeTrial = {
+  type: instructionsResponse,
+  pages: [p(honeycombLanguage.endPractice.instructions)],
   show_clickable_nav: true,
   post_trial_gap: 500,
 };
@@ -141,5 +148,6 @@ export {
   preloadTrial,
   welcomeTrial,
   endWalkthroughTrial,
+  endPracticeTrial,  
   consentTrial,
 };

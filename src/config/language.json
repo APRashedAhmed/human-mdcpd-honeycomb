@@ -9,21 +9,31 @@
   },
   "trials": {
     "honeycomb": {
-      "welcome": "Welcome to the experiment. Press any key to begin.",
+      "welcome": "Welcome to the experiment. Press next to view the consent form.",
       "instructions": {
         "read": "Please read the following instructions carefully.",
-        "details": "In this experiment you will watch a video of a ball bouncing around the screen that changes color, however its color gets hidden in the middle region. You will be asked to report the final color of the ball at the end of the video.",
+        "details": "In this experiment you will watch videos of a ball bouncing around the screen that changes colors between <span style='color: red;'><b>red</b></span>, <span style='color: green;'><b>green</b></span>, and <span style='color: blue;'><b>blue</b></span>. At the end of each video, you will be asked to report the <b>final color</b> of the ball at the end of the video using your keyboard by pressing <span style='color: red;'><b>1</b></span>, <span style='color: green;'><b>2</b></span>, or <span style='color: blue;'><b>3</b></span>.",
         "example": {
           "start": "If the color of the ball is ",
           "middle": ", press the key ",
           "end": " on the keyboard as fast as you can."
         },
         "spacebar": "When watching a video, if you see a color change or think one is about to occur, press the spacebar",
-        "nextTutorial": "Click next to begin a short walkthrough",
+        "nextTutorial": "For the purposes of understanding the task, we prepared a short walkthrough meant to demonstrate the core elements of the task. <br><br>You will be able to pause and rewind the videos as you please during the walkthrough, but note that the videos in the main task cannot be interacted with and will only play once before transitioning to the color choice screen. Additionally, we have reduced the speed of the ball in the walkthrough videos to further help with understanding the task. <br><br>Press next to begin the walkthrough.",
         "next": "Click next to begin."
       },
+      "walkthrough": {
+	"video_1": "As mentioned earlier, the ball's color can be one of <span style='color: red;'><b>red</b></span>, <span style='color: green;'><b>green</b></span>, and <span style='color: blue;'><b>blue</b></span>. Note that in all the videos, the ball will also always transition in this sequence before repeating (<span style='color: red;'><b>R</b></span>-><span style='color: green;'><b>G</b></span>-><span style='color: blue;'><b>B</b></span>-><span style='color: red;'><b>R</b></span>-><span style='color: green;'><b>G</b></span>-><span style='color: blue;'><b>B</b></span>...). In the next screen, you must select the color of the ball at the end of the video, which is <span style='color: green;'><b>green</b></span> for this video. <br>Once the video ends, click next to be shown the choice screen.",
+	"video_2": "For some videos, the ball will not change color often. Here, it only transitions twice and ends in <span style='color: red;'><b>red</b></span>. <br>Once the video ends, click next to be shown the choice screen.",
+	"video_3": "But for others videos, the ball will change several times, where here it ends in <span style='color: blue;'><b>blue</b></span>. <br>Once the video ends, click next to be shown the choice screen.",
+	"video_4": "The real task will have a grayzone like in this video, which conceals the color of the ball as it passes by. Note that the color of the ball can still change even if it is not viewable. In video ends with the color of the ball being visibly <span style='color: red;'><b>red</b></span>, however for most trials the ball will not be viewable at the end. <br>Once the video ends, click next to be shown the choice screen.",
+	"video_5": "Most videos will end with the ball inside of the grayzone like this one and you will need to guess the final color while not being able to directly see it. For this trial the ball ends with the same color it entered the grayzone, which is <span style='color: green;'><b>green</b></span>. <br>Once the video ends, click next to be shown the choice screen."
+      },
       "endWalkthrough": {
-        "instructions": "This is the end of the walkthrough, click next to practice on a few tutorial videos"
+        "instructions": "Now that you have completed the walkthrough, we have a few practice videos which are identical to the main task. Please note that unlike the walkthrough videos, the the videos will not be controllable, the speed of the ball is increased, and the videos are much shorter. Please answer as quickly and as accurately as possible. For these practice videos, you will be given feedback after each choice. <br><br>Click next to begin the practice videos."
+      },
+      "endPractice": {
+        "instructions": "Much harder wasn't it? Don't worry if you missed a few! The task gets easier as you settle into the rhythm of each trial, so it's okay to miss some as you get comfortable with it. <br><br>You are about to begin the main portion of the study. Unlike the practice session, you will only be given feedback after completing a block of videos (approximately 14 each). There are total of 20 blocks, and you will be able to take a break for long as you need in between each block. Please answer as accurately and quickly as possible, as you will be compensated according to your performance on the task. <br><br>Click next to begin the first block."
       },
       "debrief": {
         "accuracy": {

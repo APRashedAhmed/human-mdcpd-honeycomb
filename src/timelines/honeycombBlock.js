@@ -1,5 +1,6 @@
 import jsPsychVideoKeyboardResponse from "@jspsych/plugin-video-keyboard-response";
 import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import jsPsychVideoButtonResponse from '@jspsych/plugin-video-button-response';
 import jsPsychPreload from '@jspsych/plugin-preload';
 import Papa from 'papaparse';
 
@@ -11,10 +12,10 @@ import { p, b } from "../lib/markup/tags";
 import videoPaths from '../videoPaths.json';
 
 // import { taskSettings } from "../config/main";
+const honeycombLanguage = language.trials.honeycomb;
 
 async function createHoneycombBlock(jsPsych) {
   // const { fixation: fixationSettings } = taskSettings;
-  const honeycombLanguage = language.trials.honeycomb;
 
   const readAndFilterCsv = (csvFilePath) => {
     return new Promise((resolve, reject) => {
@@ -142,9 +143,10 @@ async function createHoneycombBlock(jsPsych) {
 
   const fixation = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<div style="font-size:60px;">+</div>',
+    // stimulus: '<div style="font-size:60px;">+</div>',
+    stimulus: ' ',
     choices: "NO_KEYS",
-    trial_duration: 1000,
+    trial_duration: 250,
     data: {
       task: "fixation",
     },
@@ -215,9 +217,9 @@ async function createHoneycombBlock(jsPsych) {
       let question = "<p>What color was the ball at the end of the video?<p>";
       let choices = `
               <div style='text-align: center;'>
-                  <span style='color: red; margin-right: 15px;'  >(1) <b>Red</b>  <br></span>
-                  <span style='color: green; margin-right: 15px;'>(2) <b>Green</b><br></span>
-                  <span style='color: blue;'                     >(3) <b>Blue</b> <br></span>
+                  <span style='color: red; margin-right: 5px;'  >(1) <b>Red</b><br></span>
+                  <span style='color: green; margin-left: 15px;'>(2) <b>Green</b><br></span>
+                  <span style='color: blue;'                    >(3) <b>Blue</b><br></span>
               </div>`;
       return "<div>" + question + choices + "</div>";
     },
@@ -287,25 +289,29 @@ async function createHoneycombBlock(jsPsych) {
 function createWalkthroughTrial(jsPsych) {
   const fixation = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<div style="font-size:60px;">+</div>',
+    // stimulus: '<div style="font-size:60px;">+</div>',
+    stimulus: ' ',
     choices: "NO_KEYS",
-    trial_duration: 1000,
+    trial_duration: 250,
     data: {
       task: "fixation",
     },
   };
   const videoTrial = {
-    type: jsPsychVideoKeyboardResponse,
+    type: jsPsychVideoButtonResponse,
     // Display a stimulus passed as a timeline variable
     stimulus: jsPsych.timelineVariable("stimulus"),
-    choices: [" ", "Enter"],
-    trial_ends_after_video: true,
-    response_ends_trial: false,
-    prompt: function () {
-      return `<div style="position: fixed; top: 50%; left: 25%; transform: translate(-50%, -50%); color: black; font-size: 24px; z-index: 100;">
-                  ${jsPsych.timelineVariable("text")}
-              </div>`;
-    },
+    choices: ["Next"],
+    trial_ends_after_video: false,
+    response_ends_trial: true,
+    response_allowed_while_playing: false,
+    prompt: jsPsych.timelineVariable("text"),
+    controls: true
+    // prompt: function () {
+    //   return `<div style="position: fixed; top: 50%; left: 25%; transform: translate(-50%, -50%); color: black; font-size: 24px; z-index: 100;">
+    //               ${jsPsych.timelineVariable("text")}
+    //           </div>`;
+    // },
   };
 
   const choiceTrial = {
@@ -314,13 +320,13 @@ function createWalkthroughTrial(jsPsych) {
       let question = "<p>What color was the ball at the end of the video?<p>";
       let choices = `
               <div style='text-align: center;'>
-                  <span style='color: red; margin-right: 15px;'  >(1) Red  <br></span>
-                  <span style='color: green; margin-right: 15px;'>(2) Green<br></span>
-                  <span style='color: blue;'                     >(3) Blue <br></span>
+                  <span style='color: red; margin-right: 5px;'  >(1) <b>Red</b><br></span>
+                  <span style='color: green; margin-left: 15px;'>(2) <b>Green</b><br></span>
+                  <span style='color: blue;'                    >(3) <b>Blue</b><br></span>
               </div>`;
       return "<div>" + question + choices + "</div>";
     },
-    trial_duration: 10000,
+    // trial_duration: 10000,
     choices: ["1", "2", "3"],
     response_ends_trial: true,
     data: {
@@ -335,29 +341,29 @@ function createWalkthroughTrial(jsPsych) {
 
   const trial_videos = [
     {
-      stimulus: ["assets/videos/walkthrough/1_no_gray_base_transitions_green.mp4"],
+      stimulus: ["assets/videos/walkthrough/1_demonstrate_task_physics_and_color_green.mp4"],
       correct_response: "2",
-      text: "Ball transitions red -> green -> blue",
+      text: honeycombLanguage.walkthrough.video_1,
     },
     {
-      stimulus: ["assets/videos/walkthrough/2_no_gray_low_change_red.mp4"],
-      correct_response: "2",
-      text: "Sometimes it doesn't change often",
-    },
-    {
-      stimulus: ["assets/videos/walkthrough/3_no_gray_high_change_green.mp4"],
-      correct_response: "3",
-      text: "Sometimes it changes a lot",
-    },
-    {
-      stimulus: ["assets/videos/walkthrough/4_gray_outside_end_red.mp4"],
-      correct_response: "2",
-      text: "Grayzone is present in the main task but ball can end outside of it",
-    },
-    {
-      stimulus: ["assets/videos/walkthrough/5_gray_introduction_blue.mp4"],
+      stimulus: ["assets/videos/walkthrough/2_lower_number_of_changes_red.mp4"],
       correct_response: "1",
-      text: "However, most trials will have the ball end inside it",
+      text: honeycombLanguage.walkthrough.video_2,
+    },
+    {
+      stimulus: ["assets/videos/walkthrough/3_higher_number_of_changes_blue.mp4"],
+      correct_response: "3",
+      text: honeycombLanguage.walkthrough.video_3,
+    },
+    {
+      stimulus: ["assets/videos/walkthrough/4_introduce_the_grayzone_red.mp4"],
+      correct_response: "1",
+      text: honeycombLanguage.walkthrough.video_4,
+    },
+    {
+      stimulus: ["assets/videos/walkthrough/5_videos_end_in_the_grayzone_green.mp4"],
+      correct_response: "2",
+      text: honeycombLanguage.walkthrough.video_5,
     },
   ];
 
@@ -371,12 +377,13 @@ function createWalkthroughTrial(jsPsych) {
 }
 
 //**************************************************************************//
-function createTutorialTrial(jsPsych) {
+function createPracticeTrial(jsPsych) {
   const fixation = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<div style="font-size:60px;">+</div>',
+    stimulus: ' ',
+    // stimulus: '<div style="font-size:60px;">+</div>',
     choices: "NO_KEYS",
-    trial_duration: 1000,
+    trial_duration: 250,
     data: {
       task: "fixation",
     },
@@ -396,9 +403,9 @@ function createTutorialTrial(jsPsych) {
       let question = "<p>What color was the ball at the end of the video?<p>";
       let choices = `
               <div style='text-align: center;'>
-                  <span style='color: red; margin-right: 15px;'  >(1) Red  <br></span>
-                  <span style='color: green; margin-right: 15px;'>(2) Green<br></span>
-                  <span style='color: blue;'                     >(3) Blue <br></span>
+                  <span style='color: red; margin-right: 5px;'  >(1) <b>Red</b><br></span>
+                  <span style='color: green; margin-left: 15px;'>(2) <b>Green</b><br></span>
+                  <span style='color: blue;'                    >(3) <b>Blue</b><br></span>
               </div>`;
       return "<div>" + question + choices + "</div>";
     },
@@ -463,4 +470,4 @@ function createTutorialTrial(jsPsych) {
   return timeline;
 }
 
-export { createHoneycombBlock, createWalkthroughTrial, createTutorialTrial };
+export { createHoneycombBlock, createWalkthroughTrial, createPracticeTrial };

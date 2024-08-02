@@ -7,6 +7,7 @@ import jsPsychFullscreen from "@jspsych/plugin-fullscreen";
 export const enterFullscreen = {
   type: jsPsychFullscreen,
   fullscreen_mode: true,
+  message:"<p>The experiment will switch to full screen mode when you press continue below.</p>"
 };
 
 /**
