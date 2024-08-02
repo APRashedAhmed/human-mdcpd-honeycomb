@@ -2,21 +2,42 @@ import { showMessage } from "@brown-ccv/behavioral-task-trials";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import instructionsResponse from "@jspsych/plugin-instructions";
 import jsPsychPreload from '@jspsych/plugin-preload';
+import jsPsychExternalHtml from '@jspsych/plugin-external-html';
 
 import { config, language, taskSettings } from "../config/main";
+// import { div, p, b, h1, h2, h3 } from "../lib/markup/tags";
 import { div, p, b } from "../lib/markup/tags";
 
 const honeycombLanguage = language.trials.honeycomb;
+// const consent = honeycombLanguage.welcome.consent
 
 /**
  * Trial that displays a welcome message and waits for the participant to press a key
  */
 const welcomeTrial = {
   type: instructionsResponse,
-  pages: [p(honeycombLanguage.welcome)],
+  pages: [
+    p(honeycombLanguage.welcome.welcome)
+  ],
   show_clickable_nav: true,
 };
 
+var check_consent = function() {
+    if (document.getElementById('consent_checkbox').checked) {
+        return true;
+    }
+    else {
+        alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
+        return false;
+    }
+};
+
+var consentTrial = {
+  type: jsPsychExternalHtml,
+  url: "consent.html",
+  cont_btn: "start",
+  check_fn: check_consent
+};
 /**
  * Trial that displays instructions for the participant.
  * Note that the participant has the ability to navigate between the pages of the instructions.
@@ -120,4 +141,5 @@ export {
   preloadTrial,
   welcomeTrial,
   endWalkthroughTrial,
+  consentTrial,
 };

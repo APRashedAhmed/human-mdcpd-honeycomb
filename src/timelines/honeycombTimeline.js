@@ -6,6 +6,7 @@ import {
   instructionsTrial,
   preloadTrial,
   welcomeTrial,
+  consentTrial,
 } from "../trials/honeycombTrials";
 import { createHoneycombBlock, createWalkthroughTrial, createTutorialTrial } from "./honeycombBlock";
 
@@ -22,9 +23,10 @@ async function createHoneycombTimeline(jsPsych) {
   const tutorialTrial = createTutorialTrial(jsPsych)
   const debriefTrial = createDebriefTrial(jsPsych);
   const timeline =
-    process.env.REACT_APP_MODE === "tutorial"
-      ? [
+	process.env.REACT_APP_MODE === "tutorial"
+	? [
           welcomeTrial,
+	  consentTrial,
           enterFullscreen,
           preloadTrial,
           instructionsTrial,
@@ -36,8 +38,9 @@ async function createHoneycombTimeline(jsPsych) {
           finishTrial,
           exitFullscreen,
         ]
-      : [
+	: [
           welcomeTrial,
+	  consentTrial,
           enterFullscreen,
           preloadTrial,
           instructionsTrial,
@@ -45,8 +48,8 @@ async function createHoneycombTimeline(jsPsych) {
           debriefTrial,
           finishTrial,
           exitFullscreen,
-        ];
-
+	];
+  
   return timeline;
 }
 

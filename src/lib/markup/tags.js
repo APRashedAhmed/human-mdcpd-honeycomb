@@ -64,6 +64,26 @@ function h1(children, attributes = {}) {
 }
 
 /**
+ * Wraps a given string in an h2 tag
+ * @param {string} children The children of the HTML tag
+ * @param {object} attributes HTML attributes to add to the tag
+ * @returns {string} A string containing static HTML
+ */
+function h2(children, attributes = {}) {
+  return tag("h2", children, attributes);
+}
+
+/**
+ * Wraps a given string in an h3 tag
+ * @param {string} children The children of the HTML tag
+ * @param {object} attributes HTML attributes to add to the tag
+ * @returns {string} A string containing static HTML
+ */
+function h3(children, attributes = {}) {
+  return tag("h3", children, attributes);
+}
+
+/**
  * Wraps a given string in an em tag
  * @param {string} children The children of the HTML tag
  * @param {object} attributes HTML attributes to add to the tag
@@ -102,4 +122,4 @@ function span(children, attributes = {}) {
   return tag("span", children, attributes);
 }
 
-export { b, br, div, h1, i, image, p, span, tag };
+export { b, br, div, h1, h2, h3, i, image, p, span, tag };

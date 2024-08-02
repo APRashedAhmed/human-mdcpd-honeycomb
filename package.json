@@ -16,6 +16,7 @@
   "dependencies": {
     "@brown-ccv/behavioral-task-trials": "^2.0.0",
     "@fortawesome/fontawesome-free": "^6.4.2",
+    "@jspsych/plugin-external-html": "^2.0.0",
     "@jspsych/plugin-fullscreen": "^1.2.0",
     "@jspsych/plugin-html-button-response": "^1.1.1",
     "@jspsych/plugin-html-keyboard-response": "^1.1.1",
@@ -78,30 +79,24 @@
     "start": "cross-env BROWSER=\"none\" NODE_PATH=\"./src\" IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "start:browser": "cross-env IMAGE_INLINE_SIZE_LIMIT=0 react-scripts start",
     "start:electron": "wait-on http://127.0.0.1:3000 && cross-env ELECTRON_START_URL=\"http://127.0.0.1:3000\" electron .",
-    
     "dev": "concurrently -k npm:start npm:start:electron",
     "dev:firebase": "dotenv -e env/.env.firebase npm run start:browser",
     "dev:firebase:tutorial": "dotenv -e env/.env.tutorial dotenv -e env/.env.firebase npm run start:browser",
-    
     "dev:home": "dotenv -e env/.env.home npm run dev",
     "dev:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run dev",
     "dev:clinic": "dotenv -e env/.env.clinic npm run dev",
     "dev:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run dev",
     "dev:turk-prolific": "dotenv -e env/.env.turk-prolific npm run dev",
-    
     "dev:tutorial": "dotenv -e env/.env.tutorial npm run dev",
-    
     "dev:spacebar": "dotenv -e env/.env.spacebar npm run dev",
-    "prebuild": "electron-rebuild && node src/generateVideoPaths.js",    
+    "prebuild": "electron-rebuild && node src/generateVideoPaths.js",
     "build": "react-scripts build",
     "build:home": "dotenv -e env/.env.home npm run build",
     "build:home:video": "dotenv -e env/.env.home dotenv -e env/.env.video npm run build",
     "build:clinic": "dotenv -e env/.env.clinic npm run build",
     "build:clinic:video": "dotenv -e env/.env.clinic dotenv -e env/.env.video npm run build",
-    
     "build:firebase": "dotenv -e env/.env.firebase npm run build",
     "build:firebase:tutorial": "dotenv -e env/.env.tutorial dotenv -e env/.env.firebase npm run build",
-    
     "build:turk-prolific": "dotenv -e env/.env.turk-prolific npm run build",
     "rebuild": "electron-rebuild",
     "package:windows": "react-scripts build && electron-forge make --arch x64 --targets @electron-forge/maker-squirrel",
