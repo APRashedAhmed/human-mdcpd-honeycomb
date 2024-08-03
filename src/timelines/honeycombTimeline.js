@@ -3,13 +3,18 @@ import {
   createDebriefTrial,
   endWalkthroughTrial,
   finishTrial,
-  instructionsTrial,
+  // instructionsTrial,
   preloadTrial,
   welcomeTrial,
   consentTrial,
   endPracticeTrial,  
 } from "../trials/honeycombTrials";
-import { createHoneycombBlock, createWalkthroughTrial, createPracticeTrial } from "./honeycombBlock";
+import {
+  createHoneycombBlock,
+  createWalkthroughTrial,
+  createPracticeTrial,
+  createInstructionsTrial,
+} from "./honeycombBlock";
 
 /**
  * This timeline builds the example reaction time task from the jsPsych tutorial.
@@ -20,37 +25,39 @@ import { createHoneycombBlock, createWalkthroughTrial, createPracticeTrial } fro
 async function createHoneycombTimeline(jsPsych) {
   // jsPsych.setProgressBar(0);
   const honeycombTrials = await createHoneycombBlock(jsPsych);
+  const instructionsTrial = await createInstructionsTrial(jsPsych);  
   const walkthroughTrial = createWalkthroughTrial(jsPsych);
-  const practiceTrial = createPracticeTrial(jsPsych)
+  const practiceTrial = createPracticeTrial(jsPsych);
   const debriefTrial = createDebriefTrial(jsPsych);
-  const timeline =
-	process.env.REACT_APP_MODE === "tutorial"
-	? [
-          welcomeTrial,
-	  consentTrial,
-          enterFullscreen,
-          preloadTrial,
-          instructionsTrial,
-          walkthroughTrial,
-          endWalkthroughTrial,
-          practiceTrial,
-	  endPracticeTrial,	  
-          honeycombTrials,
-          debriefTrial,
-          finishTrial,
-          exitFullscreen,
-        ]
-	: [
-          welcomeTrial,
-	  consentTrial,
-          enterFullscreen,
-          preloadTrial,
-          instructionsTrial,
-          honeycombTrials,
-          debriefTrial,
-          finishTrial,
-          exitFullscreen,
-	];
+  
+  const timeline = [];
+  
+  // Always include these trials
+  timeline.push(
+    welcomeTrial,
+    consentTrial,
+    enterFullscreen,
+    preloadTrial,
+    instructionsTrial
+  );
+  
+  // Add tutorial-specific trials if in tutorial mode
+  if (process.env.REACT_APP_MODE === "tutorial") {
+    timeline.push(
+      walkthroughTrial,
+      endWalkthroughTrial,
+      practiceTrial,
+      endPracticeTrial
+    );
+  }
+  
+  // Always include these trials
+  timeline.push(
+    honeycombTrials,
+    debriefTrial,
+    finishTrial,
+    exitFullscreen
+  );
   
   return timeline;
 }

@@ -12,7 +12,9 @@
       "welcome": "Welcome to the experiment. Press next to view the consent form.",
       "instructions": {
         "read": "Please read the following instructions carefully.",
-        "details": "In this experiment you will watch videos of a ball bouncing around the screen that changes colors between <span style='color: red;'><b>red</b></span>, <span style='color: green;'><b>green</b></span>, and <span style='color: blue;'><b>blue</b></span>. At the end of each video, you will be asked to report the <b>final color</b> of the ball at the end of the video using your keyboard by pressing <span style='color: red;'><b>1</b></span>, <span style='color: green;'><b>2</b></span>, or <span style='color: blue;'><b>3</b></span>.",
+        "details": "assets/trials/instructions/details.html",
+	"blocks": "assets/trials/instructions/blocks.html",
+	"prolific": "assets/trials/instructions/prolific.html",	
         "example": {
           "start": "If the color of the ball is ",
           "middle": ", press the key ",
