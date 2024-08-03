@@ -34,17 +34,11 @@ var check_consent = function() {
 
 var consentTrial = {
   type: jsPsychExternalHtml,
-  url: "consent.html",
+  url: "assets/trials/consent.html",
   cont_btn: "start",
   check_fn: check_consent
 };
-/**
- * Trial that displays instructions for the participant.
- * Note that the participant has the ability to navigate between the pages of the instructions.
- *
- * Instructions have been altered from the original tutorial to match the instructions plugin:
- * https://www.jspsych.org/7.3/plugins/instructions/#including-images
- */
+
 const instructionsTrial = {
   type: instructionsResponse,
   pages: [

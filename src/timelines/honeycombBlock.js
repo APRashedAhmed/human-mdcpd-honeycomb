@@ -2,6 +2,7 @@ import jsPsychVideoKeyboardResponse from "@jspsych/plugin-video-keyboard-respons
 import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import jsPsychVideoButtonResponse from '@jspsych/plugin-video-button-response';
 import jsPsychPreload from '@jspsych/plugin-preload';
+import instructionsResponse from "@jspsych/plugin-instructions";
 import Papa from 'papaparse';
 
 // import { fixation } from "@brown-ccv/behavioral-task-trials";
@@ -285,6 +286,42 @@ async function createHoneycombBlock(jsPsych) {
   return honeycombBlock;
 }
 
+async function fetchHtmlContentIfNeeded(content) {
+  // Check if the content is a path to an HTML file
+  if (content.endsWith('.html')) {
+    const response = await fetch(content);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch content from ${content}`);
+    }
+    return await response.text();
+  }
+  // If not a path, return the content as is
+  return p(content);
+}
+
+async function createInstructionsTrial() {
+  // Fetch the content for each instruction page
+  const readContent = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.read);
+  const detailsContent = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.details);
+  const nextContent = process.env.REACT_APP_MODE === "tutorial"
+    ? await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.nextTutorial)
+    : await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.next);
+
+  // Create the instructions trial with the fetched content
+  const instructionsTrial = {
+    type: instructionsResponse,
+    pages: [
+      readContent,
+      detailsContent,
+      nextContent,
+    ],
+    show_clickable_nav: true,
+    post_trial_gap: 500,
+  };
+
+  return instructionsTrial;
+}
+
 //**************************************************************************//
 function createWalkthroughTrial(jsPsych) {
   const fixation = {
@@ -470,4 +507,4 @@ function createPracticeTrial(jsPsych) {
   return timeline;
 }
 
-export { createHoneycombBlock, createWalkthroughTrial, createPracticeTrial };
+export { createHoneycombBlock, createWalkthroughTrial, createPracticeTrial, createInstructionsTrial };
