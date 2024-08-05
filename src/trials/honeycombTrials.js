@@ -25,7 +25,7 @@ const welcomeTrial = {
 
 var consentTrial = {
   type: jsPsychExternalHtml,
-  url: "assets/onlineConsentAMTprolific.html",
+  url: "onlineConsentAMTprolific.html",
   cont_btn: "brown-consent-button",
 };
 
