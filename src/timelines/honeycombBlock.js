@@ -145,10 +145,9 @@ async function createHoneycombBlock(jsPsych) {
 	accuracy = 0;
       } 
       
-      // const reactionTime = Math.round(correct_trials.select("rt").mean());
       const header = debriefLanguage.header;
       const accuracyMarkup = p(
-        debriefLanguage.accuracy.start + b(accuracy) + debriefLanguage.accuracy.end
+        debriefLanguage.accuracy.block.start + b(accuracy) + debriefLanguage.accuracy.block.end
       );
       const breakMarkup = p(debriefLanguage.takeBreak);
       const completeBlockMarkup = p(debriefLanguage.completeBlock);
@@ -256,8 +255,6 @@ async function createHoneycombBlock(jsPsych) {
       var proportion_complete = jsPsych.getProgressBarCompleted();
       console.log(proportion_complete);
       jsPsych.setProgressBar(proportion_complete + 1 / 275);
-
-      // jsPsych.data.get().localSave("csv", "tutorial_experiment.csv");
     },
   };
 
@@ -328,28 +325,6 @@ async function createStartInstructionsTrial() {
 
   return startInstructionsTrial;
 }
-// async function createStartInstructionsTrial() {
-//   // Fetch the content for each instruction page
-//   const readContent = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.read);
-//   const detailsContent = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.details);
-//   const nextContent = process.env.REACT_APP_MODE === "tutorial"
-//     ? await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.nextTutorial)
-//     : await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.next);
-
-//   // Create the instructions trial with the fetched content
-//   const instructionsTrial = {
-//     type: instructionsResponse,
-//     pages: [
-//       readContent,
-//       detailsContent,
-//       nextContent,
-//     ],
-//     show_clickable_nav: true,
-//     post_trial_gap: 500,
-//   };
-
-//   return instructionsTrial;
-// }
 
 async function createEndInstructionsTrial() {
   let pages = [];
