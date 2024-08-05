@@ -9,7 +9,7 @@
   },
   "trials": {
     "honeycomb": {
-      "welcome": "Welcome to the experiment. Press next to view the consent form.",
+      "welcome": "Welcome to the experiment. Press <b>next</b> to view the consent form.",
       "instructions": {
         "read": "Please read the following instructions carefully.",
         "details": "assets/trials/instructions/details.html",
@@ -21,7 +21,9 @@
           "end": " on the keyboard as fast as you can."
         },
         "spacebar": "When watching a video, if you see a color change or think one is about to occur, press the spacebar",
-        "nextTutorial": "For the purposes of understanding the task, we prepared a short walkthrough meant to demonstrate the core elements of the task. <br><br>You will be able to pause and rewind the videos as you please during the walkthrough, but note that the videos in the main task cannot be interacted with and will only play once before transitioning to the color choice screen. Additionally, we have reduced the speed of the ball in the walkthrough videos to further help with understanding the task. <br><br>Press next to begin the walkthrough.",
+        "nextTutorial": "assets/trials/instructions/nextTutorial.html",
+        "endPractice": "assets/trials/instructions/endPractice.html",
+	"start": "assets/trials/instructions/start.html",
         "next": "Click next to begin."
       },
       "walkthrough": {
@@ -29,24 +31,24 @@
 	"video_2": "For some videos, the ball will not change color often. Here, it only transitions twice and ends in <span style='color: red;'><b>red</b></span>. <br>Once the video ends, click next to be shown the choice screen.",
 	"video_3": "But for others videos, the ball will change several times, where here it ends in <span style='color: blue;'><b>blue</b></span>. <br>Once the video ends, click next to be shown the choice screen.",
 	"video_4": "The real task will have a grayzone like in this video, which conceals the color of the ball as it passes by. Note that the color of the ball can still change even if it is not viewable. In video ends with the color of the ball being visibly <span style='color: red;'><b>red</b></span>, however for most trials the ball will not be viewable at the end. <br>Once the video ends, click next to be shown the choice screen.",
-	"video_5": "Most videos will end with the ball inside of the grayzone like this one and you will need to guess the final color while not being able to directly see it. For this trial the ball ends with the same color it entered the grayzone, which is <span style='color: green;'><b>green</b></span>. <br>Once the video ends, click next to be shown the choice screen."
-      },
-      "endWalkthrough": {
-        "instructions": "Now that you have completed the walkthrough, we have a few practice videos which are identical to the main task. Please note that unlike the walkthrough videos, the the videos will not be controllable, the speed of the ball is increased, and the videos are much shorter. Please answer as quickly and as accurately as possible. For these practice videos, you will be given feedback after each choice. <br><br>Click next to begin the practice videos."
+	"video_5": "Most videos will end with the ball inside of the grayzone like this one and you will need to guess the final color while not being able to directly see it. For this trial the ball ends with the same color it entered the grayzone, which is <span style='color: green;'><b>green</b></span>. <br>Once the video ends, click next to be shown the choice screen.",
+	"endWalkthrough": "assets/trials/walkthrough/end.html"
       },
       "endPractice": {
-        "instructions": "Much harder wasn't it? Don't worry if you missed a few! The task gets easier as you settle into the rhythm of each trial, so it's okay to miss some as you get comfortable with it. <br><br>You are about to begin the main portion of the study. Unlike the practice session, you will only be given feedback after completing a block of videos (approximately 14 each). There are total of 20 blocks, and you will be able to take a break for long as you need in between each block. Please answer as accurately and quickly as possible, as you will be compensated according to your performance on the task. <br><br>Click next to begin the first block."
+        "instructions": "Much harder wasn't it? Don't worry if you missed a few! The task gets easier as you settle into the rhythm of each trial, so it's okay to miss some as you get comfortable with it. <br><br>"
       },
       "debrief": {
+	"header": "<head><meta charset=\"UTF-8\"><style>.container {width: 90%; margin: 0 auto; text-align: center; padding: 20px;}</style></head>",
         "accuracy": {
-          "start": "You responded correctly on ",
-          "end": "% of the trials."
+          "start": "You have completed this block of videos. You responded correctly on ",
+          "end": "<b>%</b> of the trials."
         },
         "reactionTime": {
           "start": "Your average response time was ",
           "end": "ms."
         },
-        "completeBlock": "Press enter to move onto the next block!",
+	"takeBreak": "Feel free to take a break now for as long as you need, but please make sure to <b>keep this window open</b> until you return.",
+        "completeBlock": "<br>When you are ready, click <b>continue</b> to begin the next block.",
         "complete": "Press any key to complete the experiment. Thank you!"
       },
       "finish": "This experiment has ended."

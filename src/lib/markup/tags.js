@@ -44,6 +44,17 @@ function br() {
 }
 
 /**
+ * Wraps a given string in an body tag
+ * @param {string} children The children of the HTML tag
+ * @param {object} attributes HTML attributes to add to the tag
+ * @returns {string} A string containing static HTML
+ */
+function body(children, attributes = {}) {
+  return tag("body", children, attributes);
+}
+
+
+/**
  * Wraps a given string in an div tag
  * @param {string} children The children of the HTML tag
  * @param {object} attributes HTML attributes to add to the tag
@@ -122,4 +133,4 @@ function span(children, attributes = {}) {
   return tag("span", children, attributes);
 }
 
-export { b, br, div, h1, h2, h3, i, image, p, span, tag };
+export { b, br, body, div, h1, h2, h3, i, image, p, span, tag };

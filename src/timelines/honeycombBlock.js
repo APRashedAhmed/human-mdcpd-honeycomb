@@ -1,5 +1,6 @@
 import jsPsychVideoKeyboardResponse from "@jspsych/plugin-video-keyboard-response";
 import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import jsPsychHtmlButtonResponse from '@jspsych/plugin-html-button-response';
 import jsPsychVideoButtonResponse from '@jspsych/plugin-video-button-response';
 import jsPsychPreload from '@jspsych/plugin-preload';
 import instructionsResponse from "@jspsych/plugin-instructions";
@@ -9,11 +10,25 @@ import Papa from 'papaparse';
 
 // import { config, taskSettings } from "../config/main";
 import { language, taskSettings } from "../config/main";
-import { p, b } from "../lib/markup/tags";
+import { p, b, div, body } from "../lib/markup/tags";
 import videoPaths from '../videoPaths.json';
 
 // import { taskSettings } from "../config/main";
 const honeycombLanguage = language.trials.honeycomb;
+
+
+async function fetchHtmlContentIfNeeded(content) {
+  // Check if the content is a path to an HTML file
+  if (content.endsWith('.html')) {
+    const response = await fetch(content);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch content from ${content}`);
+    }
+    return await response.text();
+  }
+  // If not a path, return the content as is
+  return p(content);
+}
 
 async function createHoneycombBlock(jsPsych) {
   // const { fixation: fixationSettings } = taskSettings;
@@ -115,28 +130,32 @@ async function createHoneycombBlock(jsPsych) {
   //     ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
   //     : fixationSettings.default_duration,
   // });
-
+  
+  // const completeMarkup = await fetchHtmlContentIfNeeded(debriefLanguage.completeBlock);
   const debriefTrial = (jsPsych) => ({
-    type: jsPsychHtmlKeyboardResponse,
+    type: jsPsychHtmlButtonResponse,
+    // type: jsPsychHtmlKeyboardResponse,
     stimulus: () => {
       //add language "if you need to take a break..., the next one will run for ~8min"
       const responseTrials = jsPsych.data.get().filter({ task: "response" });
       const correct_trials = responseTrials.filter({ correct: true });
-      const accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
-      const reactionTime = Math.round(correct_trials.select("rt").mean());
-
+      let accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
       const debriefLanguage = honeycombLanguage.debrief;
-
+      if (isNaN(accuracy)) {
+	accuracy = 0;
+      } 
+      
+      // const reactionTime = Math.round(correct_trials.select("rt").mean());
+      const header = debriefLanguage.header;
       const accuracyMarkup = p(
         debriefLanguage.accuracy.start + b(accuracy) + debriefLanguage.accuracy.end
       );
-      const reactionTimeMarkup = p(
-        debriefLanguage.reactionTime.start + b(reactionTime) + debriefLanguage.reactionTime.end
-      );
-      const completeMarkup = p(debriefLanguage.completeBlock);
-      return accuracyMarkup + reactionTimeMarkup + completeMarkup;
+      const breakMarkup = p(debriefLanguage.takeBreak);
+      const completeBlockMarkup = p(debriefLanguage.completeBlock);
+      
+      return header + body(div(accuracyMarkup + breakMarkup + completeBlockMarkup, { class: "container" }));
     },
-    choices: ["Enter"],
+    choices: ["Continue"],
     data: {
       task: "Block Debrief",
     },
@@ -286,40 +305,77 @@ async function createHoneycombBlock(jsPsych) {
   return honeycombBlock;
 }
 
-async function fetchHtmlContentIfNeeded(content) {
-  // Check if the content is a path to an HTML file
-  if (content.endsWith('.html')) {
-    const response = await fetch(content);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch content from ${content}`);
-    }
-    return await response.text();
-  }
-  // If not a path, return the content as is
-  return p(content);
-}
+async function createStartInstructionsTrial() {
+  const honeycombLanguage = language.trials.honeycomb;
 
-async function createInstructionsTrial() {
   // Fetch the content for each instruction page
   const readContent = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.read);
   const detailsContent = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.details);
-  const nextContent = process.env.REACT_APP_MODE === "tutorial"
-    ? await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.nextTutorial)
-    : await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.next);
-
+  
+  let pages = [readContent, detailsContent];
+  
+  if (process.env.REACT_APP_MODE === "tutorial") {
+    const nextContent = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.nextTutorial);
+    pages.push(nextContent);
+  }
   // Create the instructions trial with the fetched content
-  const instructionsTrial = {
+  const startInstructionsTrial = {
     type: instructionsResponse,
-    pages: [
-      readContent,
-      detailsContent,
-      nextContent,
-    ],
+    pages: pages,
     show_clickable_nav: true,
     post_trial_gap: 500,
   };
 
-  return instructionsTrial;
+  return startInstructionsTrial;
+}
+// async function createStartInstructionsTrial() {
+//   // Fetch the content for each instruction page
+//   const readContent = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.read);
+//   const detailsContent = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.details);
+//   const nextContent = process.env.REACT_APP_MODE === "tutorial"
+//     ? await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.nextTutorial)
+//     : await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.next);
+
+//   // Create the instructions trial with the fetched content
+//   const instructionsTrial = {
+//     type: instructionsResponse,
+//     pages: [
+//       readContent,
+//       detailsContent,
+//       nextContent,
+//     ],
+//     show_clickable_nav: true,
+//     post_trial_gap: 500,
+//   };
+
+//   return instructionsTrial;
+// }
+
+async function createEndInstructionsTrial() {
+  let pages = [];
+
+  if (process.env.REACT_APP_MODE === "tutorial") {
+    const endPractice = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.endPractice);
+    pages.push(endPractice);
+  }  
+  
+  // Fetch the content for each instruction page
+  const blocks = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.blocks);
+  pages.push(blocks);
+  const prolific = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.prolific);
+  pages.push(prolific);
+  const start = await fetchHtmlContentIfNeeded(honeycombLanguage.instructions.start);
+  pages.push(start);
+
+  // Create the instructions trial with the fetched content
+  const endInstructionsTrial = {
+    type: instructionsResponse,
+    pages: pages,
+    show_clickable_nav: true,
+    post_trial_gap: 500,
+  };
+
+  return endInstructionsTrial;
 }
 
 //**************************************************************************//
@@ -507,4 +563,10 @@ function createPracticeTrial(jsPsych) {
   return timeline;
 }
 
-export { createHoneycombBlock, createWalkthroughTrial, createPracticeTrial, createInstructionsTrial };
+export {
+  createHoneycombBlock,
+  createWalkthroughTrial,
+  createPracticeTrial,
+  createStartInstructionsTrial,
+  createEndInstructionsTrial
+};
