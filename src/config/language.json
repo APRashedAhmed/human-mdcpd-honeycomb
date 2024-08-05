@@ -55,7 +55,7 @@
         },
 	"takeBreak": "Feel free to take a break now for as long as you need, but please make sure to <b>keep this window open</b> until you return.",
         "completeBlock": "<br>When you are ready, click <b>continue</b> to begin the next block.",
-        "complete": "<br>Press <b>continue</b> to move onto the prolific payment screen."
+        "complete": "<br>Press <b>continue</b> to exit full screen and move onto the prolific payment screen."
       },
       "finish": "This experiment has ended."
     },

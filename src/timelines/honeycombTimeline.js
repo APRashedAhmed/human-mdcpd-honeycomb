@@ -58,9 +58,9 @@ async function createHoneycombTimeline(jsPsych) {
     endInstructionsTrial,
     honeycombTrials,
     debriefTrial,
+    exitFullscreen,
     prolificTrial,
-    finishTrial,
-    exitFullscreen
+    finishTrial
   );
   
   return timeline;
