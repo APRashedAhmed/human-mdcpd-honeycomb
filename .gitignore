@@ -37,3 +37,9 @@ Brewfile.lock.json
 psiturkit/*_turk
 
 src/videoPaths.json
+
+# Backup Files
+*~
+*#
+.#*
+#*

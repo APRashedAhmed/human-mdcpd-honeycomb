@@ -86,7 +86,7 @@ async function addToFirebase(data) {
 
   try {
     const experiment = getExperimentRef(studyID, participantID, startDate);
-    await experiment.collection("trials").add(data);
+    await experiment.update('trials', firebase.firestore.FieldValue.arrayUnion(data));
   } catch (error) {
     console.error("Unable to add trial:\n", error);
   }

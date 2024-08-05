@@ -23,21 +23,21 @@ const welcomeTrial = {
   show_clickable_nav: true,
 };
 
-var check_consent = function() {
-    if (document.getElementById('consent_checkbox').checked) {
-        return true;
-    }
-    else {
-        alert("If you wish to participate, you must check the 'I agree' box.");
-        return false;
-    }
-};
+// var check_consent = function() {
+//     if (document.getElementById('consent_checkbox').checked) {
+//         return true;
+//     }
+//     else {
+//         alert("If you wish to participate, you must check the 'I agree' box.");
+//         return false;
+//     }
+// };
 
 var consentTrial = {
   type: jsPsychExternalHtml,
-  url: "assets/trials/consent.html",
-  cont_btn: "start",
-  check_fn: check_consent
+  url: "assets/consent_forms/onlineConsentAMTprolific.html",
+  cont_btn: "brown-consent-button",
+  // check_fn: check_consent
 };
 
 const instructionsTrial = {
