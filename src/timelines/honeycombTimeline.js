@@ -1,14 +1,12 @@
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
 import {
   createDebriefTrial,
-  // endWalkthroughTrial,
   finishTrial,
-  // instructionsTrial,
   preloadTrial,
   welcomeTrial,
   consentTrial,
-  createEndWalkthroughTrial
-  // endPracticeTrial,  
+  createEndWalkthroughTrial,
+  prolificTrial
 } from "../trials/honeycombTrials";
 import {
   createHoneycombBlock,
@@ -60,6 +58,7 @@ async function createHoneycombTimeline(jsPsych) {
     endInstructionsTrial,
     honeycombTrials,
     debriefTrial,
+    prolificTrial,
     finishTrial,
     exitFullscreen
   );
