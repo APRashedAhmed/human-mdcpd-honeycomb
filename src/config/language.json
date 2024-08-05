@@ -40,8 +40,14 @@
       "debrief": {
 	"header": "<head><meta charset=\"UTF-8\"><style>.container {width: 90%; margin: 0 auto; text-align: center; padding: 20px;}</style></head>",
         "accuracy": {
-          "start": "You have completed this block of videos. You responded correctly on ",
-          "end": "<b>%</b> of the trials."
+	  "block": {
+            "start": "You have completed this block of videos. You responded correctly on ",
+            "end": "<b>%</b> of the trials."
+	  },
+	  "experiment": {
+            "start": "You have completed all videos in the experiment. You responded correctly on ",
+            "end": "<b>%</b> of all trials."
+	  }
         },
         "reactionTime": {
           "start": "Your average response time was ",
@@ -49,7 +55,7 @@
         },
 	"takeBreak": "Feel free to take a break now for as long as you need, but please make sure to <b>keep this window open</b> until you return.",
         "completeBlock": "<br>When you are ready, click <b>continue</b> to begin the next block.",
-        "complete": "Press any key to complete the experiment. Thank you!"
+        "complete": "<br>Press <b>continue</b> to move onto the prolific payment screen."
       },
       "finish": "This experiment has ended."
     },
