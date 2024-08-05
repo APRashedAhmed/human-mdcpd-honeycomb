@@ -23,21 +23,10 @@ const welcomeTrial = {
   show_clickable_nav: true,
 };
 
-// var check_consent = function() {
-//     if (document.getElementById('consent_checkbox').checked) {
-//         return true;
-//     }
-//     else {
-//         alert("If you wish to participate, you must check the 'I agree' box.");
-//         return false;
-//     }
-// };
-
 var consentTrial = {
   type: jsPsychExternalHtml,
-  url: "assets/consent_forms/onlineConsentAMTprolific.html",
+  url: "assets/onlineConsentAMTprolific.html",
   cont_btn: "brown-consent-button",
-  // check_fn: check_consent
 };
 
 const instructionsTrial = {
