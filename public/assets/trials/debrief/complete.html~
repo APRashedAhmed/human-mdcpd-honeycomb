@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Instruction Prolific</title>
+  <title>Debrief Complete</title>
   <style>
     .container {
       width: 90%;          /* Set the container width to 80% */
@@ -16,6 +16,8 @@
 <body>
   <div class="container">
     <p>
+	"break": "Feel free to take a break for as long as you need."
+      
       In order for the Prolific to properly compensate you for your time, <b>you
 	must fully complete all experimental blocks</b>.
     </p>

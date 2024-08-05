@@ -1,19 +1,21 @@
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
 import {
   createDebriefTrial,
-  endWalkthroughTrial,
+  // endWalkthroughTrial,
   finishTrial,
   // instructionsTrial,
   preloadTrial,
   welcomeTrial,
   consentTrial,
-  endPracticeTrial,  
+  createEndWalkthroughTrial
+  // endPracticeTrial,  
 } from "../trials/honeycombTrials";
 import {
   createHoneycombBlock,
   createWalkthroughTrial,
   createPracticeTrial,
-  createInstructionsTrial,
+  createStartInstructionsTrial,
+  createEndInstructionsTrial,
 } from "./honeycombBlock";
 
 /**
@@ -25,10 +27,9 @@ import {
 async function createHoneycombTimeline(jsPsych) {
   // jsPsych.setProgressBar(0);
   const honeycombTrials = await createHoneycombBlock(jsPsych);
-  const instructionsTrial = await createInstructionsTrial(jsPsych);  
-  const walkthroughTrial = createWalkthroughTrial(jsPsych);
-  const practiceTrial = createPracticeTrial(jsPsych);
-  const debriefTrial = createDebriefTrial(jsPsych);
+  const startInstructionsTrial = await createStartInstructionsTrial(jsPsych);  
+  const endInstructionsTrial = await createEndInstructionsTrial(jsPsych);  
+  const debriefTrial = await createDebriefTrial(jsPsych);
   
   const timeline = [];
   
@@ -38,21 +39,25 @@ async function createHoneycombTimeline(jsPsych) {
     consentTrial,
     enterFullscreen,
     preloadTrial,
-    instructionsTrial
+    startInstructionsTrial
   );
   
   // Add tutorial-specific trials if in tutorial mode
   if (process.env.REACT_APP_MODE === "tutorial") {
+    const walkthroughTrial = createWalkthroughTrial(jsPsych);
+    const endWalkthroughTrial = await createEndWalkthroughTrial(jsPsych);
+    const practiceTrial = createPracticeTrial(jsPsych);
+    
     timeline.push(
       walkthroughTrial,
       endWalkthroughTrial,
-      practiceTrial,
-      endPracticeTrial
+      practiceTrial
     );
   }
   
   // Always include these trials
   timeline.push(
+    endInstructionsTrial,
     honeycombTrials,
     debriefTrial,
     finishTrial,
