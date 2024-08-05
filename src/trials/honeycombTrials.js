@@ -132,7 +132,7 @@ const createDebriefTrial = (jsPsych) => ({
     const responseTrials = jsPsych.data.get().filter({ task: "response" });
     const correct_trials = responseTrials.filter({ correct: true });
     let accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
-    const reactionTime = Math.round(correct_trials.select("rt").mean());
+    // const reactionTime = Math.round(correct_trials.select("rt").mean());
     const debriefLanguage = honeycombLanguage.debrief;
 
     if (isNaN(accuracy)) {
@@ -142,13 +142,13 @@ const createDebriefTrial = (jsPsych) => ({
     const accuracyMarkup = p(
       debriefLanguage.accuracy.start + accuracy + debriefLanguage.accuracy.end
     );
-    const reactionTimeMarkup = p(
-      debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
-    );
+    // const reactionTimeMarkup = p(
+    //   debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
+    // );
     const completeMarkup = p(debriefLanguage.complete);
 
     // Display the accuracy, reaction time, and complete message as 3 paragraphs in a row
-    return accuracyMarkup + reactionTimeMarkup + completeMarkup;
+    return accuracyMarkup + completeMarkup;
   },
   on_load: async () => {
     // Prepare data to save
@@ -254,6 +254,12 @@ const finishTrial = showMessage(config, {
   message: honeycombLanguage.finish,
 });
 
+const prolificTrial = {
+  type: htmlKeyboardResponse,
+  stimulus: "<p><a href=\"https://app.prolific.com/submissions/complete?cc=C11E3656\">Click here to return to Prolific and complete the study</a>.</p>",
+  choices: "NO_KEYS"
+};
+
 export {
   createDebriefTrial,
   finishTrial,
@@ -263,5 +269,6 @@ export {
   // endWalkthroughTrial,
   endPracticeTrial,  
   consentTrial,
-  createEndWalkthroughTrial,  
+  createEndWalkthroughTrial,
+  prolificTrial
 };
