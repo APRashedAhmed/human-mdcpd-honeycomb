@@ -36,6 +36,7 @@ Brewfile.lock.json
 .DS_Store
 psiturkit/*_turk
 
+# The resulting video paths json file
 src/videoPaths.json
 
 # Backup Files
@@ -43,3 +44,25 @@ src/videoPaths.json
 *#
 .#*
 #*
+
+# Everything in data folder
+data/*
+data/*.*
+
+# .autoenv
+.autoenv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Pytest
+.pytest_cache/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# But keep all the .gitkeep files
+!*.gitkeep
+
