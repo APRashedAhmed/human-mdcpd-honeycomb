@@ -1,0 +1,22 @@
+name: hmdcpd
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - webcolors
+  - rich
+  - python-dotenv
+  - pip
+  - tqdm
+  - requests
+  - loguru
+  - ipdb
+  - seaborn
+  - numpy
+  - pandas
+  - ipython
+  - jupyterlab
+  - nodejs
+  - watermark
+  - pytest
