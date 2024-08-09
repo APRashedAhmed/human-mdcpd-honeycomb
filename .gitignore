@@ -49,20 +49,6 @@ src/videoPaths.json
 data/*
 data/*.*
 
-# .autoenv
-.autoenv
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Pytest
-.pytest_cache/
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
 # But keep all the .gitkeep files
 !*.gitkeep
 

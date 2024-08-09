@@ -172,7 +172,7 @@ const finishTrial = showMessage(config, {
 
 const prolificTrial = {
   type: jsPsychExternalHtml,
-  url: "assets/trials/prolific/bonus.html",
+  url: "assets/trials/prolific/complete.html",
 };
 
 export {
