@@ -1,35 +1,62 @@
 # Human Multidimensional Changepoint Detection Task
 
-[![DOI:10.1590/1516-4446-2020-1675](https://img.shields.io/badge/DOI-10.1590%2F1516--4446--2020--1675-orange)](https://doi.org/10.1590/1516-4446-2020-1675) [![docs](https://img.shields.io/badge/docs-stable-blue)](https://brown-ccv.github.io/honeycomb-docs/)
+See the [Honeycomb Documentation](https://brown-ccv.github.io/honeycomb-docs/) page 
+for details on how to use the honeycomb ecosystem.
 
-## Prerequisites/Dependencies
+## Getting Started
 
-To install all necessary dependencies and prerequisites for the task, follow the instructions [**here**](https://brown-ccv.github.io/honeycomb-docs/docs/quick_start#installing-prerequisites) until the end of the page
+### Running Locally
 
-If you don't have some fundamental prerequisites like git installed, follow the instructions [**here**](https://brown-ccv.github.io/honeycomb-docs/docs/prerequisites):
+The task is setup to run on Firebase but can be run locally for development purposes.
+To do this you will need two terminals, one to run the task and the other to run 
+the firebase emulator.
 
-## Starting a development server
+In one terminal, run the following:
+```bash
+npm run dev:firebase
+```
 
-To get started running a local development server, you'll need to run these few commands (**note that you'll need two separate terminal windows open**):
+If your code has no issues, it should say that webpack compiled successfully. In 
+another terminal:
+```bash
+npm run firebase:emulators:start
+```
 
-`cd src` + `node server.js` _(assuming you're in the root directory)_
+Due to the firestore rules (as of v1.0.0 of the task), you will need to modify
+the database for the task to run properly. The emulator should havs started a UI
+in http://127.0.0.1:4000/firestore, so navigate to this page. Click on `registered_studies`
+on the left, then click on `Add document`, and then fill it out as shown below:
 
-`npm run dev` _(assuming you're in root directory)_
+![Add document](assets/images/add_document.png)
 
-This should start a live development server where you can freely make updates/changes which are reflected immediately
+Under `Document ID` enter "all_studies", for `Field`, enter "registered_studies", 
+set `Type` to be `array`, then click on the `+` symbol and add a `string` with 
+`Value` set to "s1". Finally, click on `Save`. The resulting page should look
+like this:
 
-To run an alternative version of the experiment that requires you to click the spacebar on color changes, use the following commands:
+![firestore](assets/images/firestore.png)
 
-`cd src` + `node server.js` _(assuming you're in the root directory)_
+<!-- ###  -->
 
-`npm run dev:spacebar` _(assuming you're in root directory)_
+<!-- ## Starting a development server -->
 
-To run an alternative version of the experiment with a short **tutorial** at the beginning consisting of 5 videos, use the following commands:
+<!-- To get started running a local development server, you'll need to run these few commands (**note that you'll need two separate terminal windows open**): -->
 
-`cd src` + `node server.js` _(assuming you're in the root directory)_
+<!-- `cd src` + `node server.js` _(assuming you're in the root directory)_ -->
 
-`npm run dev:tutorial` _(assuming you're in root directory)_
+<!-- `npm run dev` _(assuming you're in root directory)_ -->
 
-## Citations
+<!-- This should start a live development server where you can freely make updates/changes which are reflected immediately -->
 
-[Provenza, N.R., Gelin, L.F.F., Mahaphanit, W., McGrath, M.C., Dastin-van Rijn, E.M., Fan, Y., Dhar, R., Frank, M.J., Restrepo, M.I., Goodman, W.K. and Borton, D.A., 2021. Honeycomb: a template for reproducible psychophysiological tasks for clinic, laboratory, and home use. Brazilian Journal of Psychiatry, 44, pp.147-155.](https://doi.org/10.1590/1516-4446-2020-1675)
+<!-- To run an alternative version of the experiment that requires you to click the spacebar on color changes, use the following commands: -->
+
+<!-- `cd src` + `node server.js` _(assuming you're in the root directory)_ -->
+
+<!-- `npm run dev:spacebar` _(assuming you're in root directory)_ -->
+
+<!-- To run an alternative version of the experiment with a short **tutorial** at the beginning consisting of 5 videos, use the following commands: -->
+
+<!-- `cd src` + `node server.js` _(assuming you're in the root directory)_ -->
+
+<!-- `npm run dev:tutorial` _(assuming you're in root directory)_ -->
+
