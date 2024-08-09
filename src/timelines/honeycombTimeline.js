@@ -5,7 +5,6 @@ import {
   preloadTrial,
   welcomeTrial,
   consentTrial,
-  createEndWalkthroughTrial,
   prolificTrial
 } from "../trials/honeycombTrials";
 import {
@@ -14,16 +13,10 @@ import {
   createPracticeTrial,
   createStartInstructionsTrial,
   createEndInstructionsTrial,
+  createEndWalkthroughTrial
 } from "./honeycombBlock";
 
-/**
- * This timeline builds the example reaction time task from the jsPsych tutorial.
- * Take a look at how the code here compares to the jsPsych documentation!
- *
- * See the jsPsych documentation for more: https://www.jspsych.org/7.3/tutorials/rt-task/
- */
 async function createHoneycombTimeline(jsPsych) {
-  // jsPsych.setProgressBar(0);
   const honeycombTrials = await createHoneycombBlock(jsPsych);
   const startInstructionsTrial = await createStartInstructionsTrial(jsPsych);  
   const endInstructionsTrial = await createEndInstructionsTrial(jsPsych);  
@@ -42,7 +35,7 @@ async function createHoneycombTimeline(jsPsych) {
   
   // Add tutorial-specific trials if in tutorial mode
   if (process.env.REACT_APP_MODE === "tutorial") {
-    const walkthroughTrial = createWalkthroughTrial(jsPsych);
+    const walkthroughTrial = await createWalkthroughTrial(jsPsych);
     const endWalkthroughTrial = await createEndWalkthroughTrial(jsPsych);
     const practiceTrial = createPracticeTrial(jsPsych);
     
