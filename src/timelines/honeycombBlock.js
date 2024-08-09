@@ -5,15 +5,10 @@ import jsPsychVideoButtonResponse from '@jspsych/plugin-video-button-response';
 import jsPsychPreload from '@jspsych/plugin-preload';
 import instructionsResponse from "@jspsych/plugin-instructions";
 import Papa from 'papaparse';
-
-// import { fixation } from "@brown-ccv/behavioral-task-trials";
-
-// import { config, taskSettings } from "../config/main";
 import { language, taskSettings } from "../config/main";
 import { p, b, div, body } from "../lib/markup/tags";
 import videoPaths from '../videoPaths.json';
 
-// import { taskSettings } from "../config/main";
 const honeycombLanguage = language.trials.honeycomb;
 
 
@@ -31,8 +26,6 @@ async function fetchHtmlContentIfNeeded(content) {
 }
 
 async function createHoneycombBlock(jsPsych) {
-  // const { fixation: fixationSettings } = taskSettings;
-
   const readAndFilterCsv = (csvFilePath) => {
     return new Promise((resolve, reject) => {
       fetch(csvFilePath)
@@ -134,9 +127,7 @@ async function createHoneycombBlock(jsPsych) {
   // const completeMarkup = await fetchHtmlContentIfNeeded(debriefLanguage.completeBlock);
   const debriefTrial = (jsPsych) => ({
     type: jsPsychHtmlButtonResponse,
-    // type: jsPsychHtmlKeyboardResponse,
     stimulus: () => {
-      //add language "if you need to take a break..., the next one will run for ~8min"
       const responseTrials = jsPsych.data.get().filter({ task: "response" });
       const correct_trials = responseTrials.filter({ correct: true });
       let accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
@@ -354,7 +345,7 @@ async function createEndInstructionsTrial() {
 }
 
 //**************************************************************************//
-function createWalkthroughTrial(jsPsych) {
+async function createWalkthroughTrial(jsPsych) {
   const fixation = {
     type: jsPsychHtmlKeyboardResponse,
     // stimulus: '<div style="font-size:60px;">+</div>',
@@ -375,11 +366,6 @@ function createWalkthroughTrial(jsPsych) {
     response_allowed_while_playing: false,
     prompt: jsPsych.timelineVariable("text"),
     controls: true
-    // prompt: function () {
-    //   return `<div style="position: fixed; top: 50%; left: 25%; transform: translate(-50%, -50%); color: black; font-size: 24px; z-index: 100;">
-    //               ${jsPsych.timelineVariable("text")}
-    //           </div>`;
-    // },
   };
 
   const choiceTrial = {
@@ -407,42 +393,61 @@ function createWalkthroughTrial(jsPsych) {
     },
   };
 
-  const trial_videos = [
-    {
-      stimulus: ["assets/videos/walkthrough/1_demonstrate_task_physics_and_color_green.mp4"],
-      correct_response: "2",
-      text: honeycombLanguage.walkthrough.video_1,
-    },
-    {
-      stimulus: ["assets/videos/walkthrough/2_lower_number_of_changes_red.mp4"],
-      correct_response: "1",
-      text: honeycombLanguage.walkthrough.video_2,
-    },
-    {
-      stimulus: ["assets/videos/walkthrough/3_higher_number_of_changes_blue.mp4"],
-      correct_response: "3",
-      text: honeycombLanguage.walkthrough.video_3,
-    },
-    {
-      stimulus: ["assets/videos/walkthrough/4_introduce_the_grayzone_red.mp4"],
-      correct_response: "1",
-      text: honeycombLanguage.walkthrough.video_4,
-    },
-    {
-      stimulus: ["assets/videos/walkthrough/5_videos_end_in_the_grayzone_green.mp4"],
-      correct_response: "2",
-      text: honeycombLanguage.walkthrough.video_5,
-    },
-  ];
+  async function initializeTrialVideos() {  
+    const trial_videos = [
+      {
+	stimulus: ["assets/videos/walkthrough/1_demonstrate_task_physics_and_color_green.mp4"],
+	correct_response: "2",
+	text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_1),
+      },
+      {
+	stimulus: ["assets/videos/walkthrough/2_lower_number_of_changes_red.mp4"],
+	correct_response: "1",
+	text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_2),
+      },
+      {
+	stimulus: ["assets/videos/walkthrough/3_higher_number_of_changes_blue.mp4"],
+	correct_response: "3",
+	text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_3),
+      },
+      {
+	stimulus: ["assets/videos/walkthrough/4_introduce_the_grayzone_red.mp4"],
+	correct_response: "1",
+	text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_4),
+      },
+      {
+	stimulus: ["assets/videos/walkthrough/5_videos_end_in_the_grayzone_green.mp4"],
+	correct_response: "2",
+	text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_5),
+      },
+    ];
+    return trial_videos
+  }
+
+  const trial_videos = await initializeTrialVideos()
 
   const timeline = {
     timeline: [fixation, videoTrial, fixation, choiceTrial],
     timeline_variables: trial_videos,
-    randomize_order: false,
+    randomize_order: false,	// Do not shuffle these videos
   };
 
   return timeline;
 }
+
+
+//**************************************************************************//
+async function createEndWalkthroughTrial() {
+  const endWalkthrough = await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.endWalkthrough);
+  const endWalkthroughTrial = {
+    type: instructionsResponse,
+    pages: [endWalkthrough],
+    show_clickable_nav: true,
+  post_trial_gap: 500,
+  };
+  return endWalkthroughTrial
+};
+
 
 //**************************************************************************//
 function createPracticeTrial(jsPsych) {
@@ -477,7 +482,7 @@ function createPracticeTrial(jsPsych) {
               </div>`;
       return "<div>" + question + choices + "</div>";
     },
-    trial_duration: 10000,
+    trial_duration: taskSettings.choiceTrial.trial_duration,
     choices: ["1", "2", "3"],
     response_ends_trial: true,
     data: {
@@ -507,18 +512,22 @@ function createPracticeTrial(jsPsych) {
   };
 
   const answerTrial = {
-    type: jsPsychHtmlKeyboardResponse,
+    type: jsPsychHtmlButtonResponse,
     stimulus: function () {
       const correct_color = getColor(jsPsych.timelineVariable("correct_response"));
       const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].response);
-      console.log(toString(jsPsych.data.getLastTrialData().trials[0].response, "hi"));
-      console.log(jsPsych.data.getLastTrialData());
-      let correct_answer = `<p>The correct answer was <span style='color: ${correct_color}'> ${correct_color}<span>`;
-      let user_answer = `<p>You chose <span style='color: ${user_color}'> ${user_color}<span>`;
-      let spacebar = "<p>Press the spacebar to continue";
-      return "<div>" + correct_answer + user_answer + spacebar + "</div>";
+      
+      let user_answer;
+      if (user_color === undefined) {
+	user_answer = "<p>You did not choose a color in time.</p>";
+      } else {
+	user_answer = `<p>You chose <span style='color: ${user_color}'> <b>${user_color}</b>.<span>`;
+      }      
+      let correct_answer = `<p>The correct answer was <span style='color: ${correct_color}'> <b>${correct_color}</b>.<span>`;
+      
+      return "<div>" + user_answer + correct_answer + "</div>";
     },
-    choices: [" "],
+    choices: ["Continue"],
   };
 
   const trial_videos = [
@@ -543,5 +552,6 @@ export {
   createWalkthroughTrial,
   createPracticeTrial,
   createStartInstructionsTrial,
-  createEndInstructionsTrial
+  createEndInstructionsTrial,
+  createEndWalkthroughTrial,
 };

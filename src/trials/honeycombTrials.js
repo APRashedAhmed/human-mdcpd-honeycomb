@@ -6,9 +6,7 @@ import jsPsychExternalHtml from '@jspsych/plugin-external-html';
 import { addToFirebase } from '../App/deployments/firebase';
 
 import { config, language } from "../config/main";
-// import { div, p, b } from "../lib/markup/tags";
 import { p, b, div, body } from "../lib/markup/tags";
-// import { p } from "../lib/markup/tags";
 
 const honeycombLanguage = language.trials.honeycomb;
 
@@ -28,62 +26,6 @@ var consentTrial = {
   url: "onlineConsentAMTprolific.html",
   cont_btn: "brown-consent-button",
 };
-
-const instructionsTrial = {
-  type: instructionsResponse,
-  pages: [
-    p(honeycombLanguage.instructions.read),
-    p(honeycombLanguage.instructions.details),
-    // // Add a page for very possible stimuli - displays the image and the correct response
-    // ...taskSettings.honeycomb.timeline_variables.map(({ stimulus, correct_response }) => {
-    //   // Pull the color out of the file name
-    //   const color = stimulus;
-
-    //   // Build the instructions and image elements
-    //   const instructionsMarkup = p(
-    //     honeycombLanguage.instructions.example.start +
-    //       b(color, color ? { style: `color: ${color};` } : {}) +
-    //       honeycombLanguage.instructions.example.middle +
-    //       b(correct_response) +
-    //       honeycombLanguage.instructions.example.end
-    //   );
-
-    //   return div(instructionsMarkup);
-    // }),
-    // // process.env.REACT_APP_MODE === "spacebar" && p(honeycombLanguage.instructions.spacebar),
-
-    process.env.REACT_APP_MODE === "tutorial"
-      ? p(honeycombLanguage.instructions.nextTutorial)
-      : p(honeycombLanguage.instructions.next),
-  ],
-  show_clickable_nav: true,
-  post_trial_gap: 500,
-};
-
-async function fetchHtmlContentIfNeeded(content) {
-  // Check if the content is a path to an HTML file
-  if (content.endsWith('.html')) {
-    const response = await fetch(content);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch content from ${content}`);
-    }
-    return await response.text();
-  }
-  // If not a path, return the content as is
-  return p(content);
-}
-
-async function createEndWalkthroughTrial() {
-  const endWalkthrough = await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.endWalkthrough);
-  const endWalkthroughTrial = {
-    type: instructionsResponse,
-    pages: [endWalkthrough],
-    show_clickable_nav: true,
-  post_trial_gap: 500,
-  };
-  return endWalkthroughTrial
-};
-
 
 const endPracticeTrial = {
   type: instructionsResponse,
@@ -119,9 +61,6 @@ const createDebriefTrial = (jsPsych) => ({
     const accuracyMarkup = p(
       debriefLanguage.accuracy.experiment.start + b(accuracy) + debriefLanguage.accuracy.experiment.end
     );
-    // const reactionTimeMarkup = p(
-    //   debriefLanguage.reactionTime.start + reactionTime + debriefLanguage.reactionTime.end
-    // );
     const completeMarkup = p(debriefLanguage.complete);
 
     // Display the accuracy, reaction time, and complete message as 3 paragraphs in a row
@@ -144,9 +83,6 @@ const createDebriefTrial = (jsPsych) => ({
           participant_id: participant_id,
           start_date: start_date,
           session_data: JSON.parse(sessionData.json()),
-          // accuracy: data.accuracy,
-          // reaction_time: data.reactionTime,
-          // timestamp: new Date()
         };
         await addToFirebase(dataToSave);
         console.log("Data added to Firebase");
@@ -178,11 +114,9 @@ const prolificTrial = {
 export {
   createDebriefTrial,
   finishTrial,
-  instructionsTrial,
   preloadTrial,
   welcomeTrial,
   endPracticeTrial,  
   consentTrial,
-  createEndWalkthroughTrial,
-  prolificTrial
+  prolificTrial,
 };
