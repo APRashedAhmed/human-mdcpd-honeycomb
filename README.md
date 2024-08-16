@@ -1,11 +1,24 @@
 # Human Multidimensional Changepoint Detection Task
 
-See the [Honeycomb Documentation](https://brown-ccv.github.io/honeycomb-docs/) page 
+See the [Honeycomb Documentation](https://honeycomb.ccv.brown.edu/) page 
 for details on how to use the honeycomb ecosystem.
 
-## Getting Started
+## Installing
 
-### Running Locally
+There are several prerequisites before the repo can be installed directly. Take
+a look at the [Honeycomb Prerequisites](https://honeycomb.ccv.brown.edu/docs/prerequisites)
+page to them in detail, but the basic list is as follows:
+- [Git](https://git-scm.com/)
+- [Node Version Manager](https://github.com/nvm-sh/nvm)
+- [Python](https://www.python.org/)
+- [Oracle JDk](https://www.oracle.com/java/)
+
+Then you can install the packages required for the repo:
+```bash
+npm install
+```
+
+## Running Locally
 
 The task is setup to run on Firebase but can be run locally for development purposes.
 To do this you will need two terminals, one to run the task and the other to run 
@@ -36,27 +49,14 @@ like this:
 
 ![firestore](assets/images/firestore.png)
 
-<!-- ###  -->
+## Deployment
 
-<!-- ## Starting a development server -->
+The live version of the task is deployed from the main branch on Github via
+the [`Deploy to Firebase Hosting on merge`](https://github.com/APRashedAhmed/human-mdcpd-honeycomb/actions/workflows/firebase-hosting-merge.yml) 
+github action to the following URL:
 
-<!-- To get started running a local development server, you'll need to run these few commands (**note that you'll need two separate terminal windows open**): -->
+> [https://human-mdcpd-honeycomb-6b769.web.app/](https://human-mdcpd-honeycomb-6b769.web.app/)
 
-<!-- `cd src` + `node server.js` _(assuming you're in the root directory)_ -->
-
-<!-- `npm run dev` _(assuming you're in root directory)_ -->
-
-<!-- This should start a live development server where you can freely make updates/changes which are reflected immediately -->
-
-<!-- To run an alternative version of the experiment that requires you to click the spacebar on color changes, use the following commands: -->
-
-<!-- `cd src` + `node server.js` _(assuming you're in the root directory)_ -->
-
-<!-- `npm run dev:spacebar` _(assuming you're in root directory)_ -->
-
-<!-- To run an alternative version of the experiment with a short **tutorial** at the beginning consisting of 5 videos, use the following commands: -->
-
-<!-- `cd src` + `node server.js` _(assuming you're in the root directory)_ -->
-
-<!-- `npm run dev:tutorial` _(assuming you're in root directory)_ -->
-
+Note that the github action will redeploy the task on every change to the `main`
+branch, therefore be mindful of when updates are made to it if experiments are
+ongoing.
