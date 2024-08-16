@@ -3,7 +3,7 @@
 See the [Honeycomb Documentation](https://honeycomb.ccv.brown.edu/) page 
 for details on how to use the honeycomb ecosystem.
 
-## Installing
+## Installation
 
 There are several prerequisites before the repo can be installed directly. Take
 a look at the [Honeycomb Prerequisites](https://honeycomb.ccv.brown.edu/docs/prerequisites)
@@ -40,14 +40,14 @@ the database for the task to run properly. The emulator should havs started a UI
 in http://127.0.0.1:4000/firestore, so navigate to this page. Click on `registered_studies`
 on the left, then click on `Add document`, and then fill it out as shown below:
 
-![Add document](assets/images/add_document.png)
+<img src="assets/images/add_document.png" alt="Add document" width="50%" />
 
 Under `Document ID` enter "all_studies", for `Field`, enter "registered_studies", 
 set `Type` to be `array`, then click on the `+` symbol and add a `string` with 
 `Value` set to "s1". Finally, click on `Save`. The resulting page should look
 like this:
 
-![firestore](assets/images/firestore.png)
+<img src="assets/images/firestore.png" alt="Firestore" width="90%" />
 
 ## Deployment
 
