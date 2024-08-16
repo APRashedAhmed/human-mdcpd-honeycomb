@@ -40,14 +40,18 @@ the database for the task to run properly. The emulator should havs started a UI
 in http://127.0.0.1:4000/firestore, so navigate to this page. Click on `registered_studies`
 on the left, then click on `Add document`, and then fill it out as shown below:
 
-<img src="assets/images/add_document.png" alt="Add document" width="50%" />
+<div align="center">
+	<img src="assets/images/add_document.png" alt="Add document" width="30%" />
+</div>
 
 Under `Document ID` enter "all_studies", for `Field`, enter "registered_studies", 
 set `Type` to be `array`, then click on the `+` symbol and add a `string` with 
 `Value` set to "s1". Finally, click on `Save`. The resulting page should look
 like this:
 
-<img src="assets/images/firestore.png" alt="Firestore" width="90%" />
+<div align="center">
+	<img src="assets/images/firestore.png" alt="Firestore" width="80%" />
+</div>
 
 ## Deployment
 
