@@ -41,7 +41,7 @@ in http://127.0.0.1:4000/firestore, so navigate to this page. Click on `register
 on the left, then click on `Add document`, and then fill it out as shown below:
 
 <div align="center">
-	<img src="assets/images/add_document.png" alt="Add document" width="30%" />
+	<img src="assets/images/add_document.png" alt="Add document" width="40%" />
 </div>
 
 Under `Document ID` enter "all_studies", for `Field`, enter "registered_studies", 
