@@ -18,20 +18,21 @@ import {
 
 async function createHoneycombTimeline(jsPsych) {
   const honeycombTrials = await createHoneycombBlock(jsPsych);
-  const startInstructionsTrial = await createStartInstructionsTrial(jsPsych);  
-  const endInstructionsTrial = await createEndInstructionsTrial(jsPsych);  
   const debriefTrial = await createDebriefTrial(jsPsych);
   
-  const timeline = [];
+  const timeline = [welcomeTrial];
   
-  // Always include these trials
-  timeline.push(
-    welcomeTrial,
-    consentTrial,
-    enterFullscreen,
-    preloadTrial,
-    startInstructionsTrial
-  );
+  // Add these trials for all modes that aren't the end mode
+  if (process.env.REACT_APP_END !== "true") {
+    const startInstructionsTrial = await createStartInstructionsTrial(jsPsych);  
+    
+    timeline.push(
+      consentTrial,
+      enterFullscreen,
+      preloadTrial,
+      startInstructionsTrial
+    );
+  }
   
   // Add tutorial-specific trials if in tutorial mode
   if (process.env.REACT_APP_MODE === "tutorial") {
@@ -45,10 +46,18 @@ async function createHoneycombTimeline(jsPsych) {
       practiceTrial
     );
   }
+
+  // Skip if we are only testing the ending
+  if (process.env.REACT_APP_END !== "true") {
+    const endInstructionsTrial = await createEndInstructionsTrial(jsPsych);
+    
+    timeline.push(
+      endInstructionsTrial,
+    ); 
+  }  
   
   // Always include these trials
   timeline.push(
-    endInstructionsTrial,
     honeycombTrials,
     debriefTrial,
     exitFullscreen,
