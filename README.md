@@ -35,6 +35,8 @@ another terminal:
 npm run firebase:emulators:start
 ```
 
+### Firestore Rules
+
 Due to the firestore rules (as of v1.0.0 of the task), you will need to modify
 the database for the task to run properly. The emulator should havs started a UI
 in http://127.0.0.1:4000/firestore, so navigate to this page. Click on `registered_studies`
@@ -52,6 +54,26 @@ like this:
 <div align="center">
 	<img src="assets/images/firestore.png" alt="Firestore" width="80%" />
 </div>
+
+> [!NOTE]
+> This needs to be done every time the Firebase emulator is run, otherwise you
+> won't be able to log in on the initial screen
+
+### Additional Run Modes
+
+In addition to the base development run mode, there are some worth mentioning.
+To include the tutorial, which is part of the deployed version of the task:
+
+```bash
+npm run dev:firebase:tutorial
+```
+
+If just testing the video blocks, or the ending, run the following to skip all
+trials before getting to the main experiment:
+
+```bash
+npm run dev:firebase:end
+```
 
 ## Deployment
 
