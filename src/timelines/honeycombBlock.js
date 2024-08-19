@@ -11,7 +11,6 @@ import videoPaths from '../videoPaths.json';
 
 const honeycombLanguage = language.trials.honeycomb;
 
-
 async function fetchHtmlContentIfNeeded(content) {
   // Check if the content is a path to an HTML file
   if (content.endsWith('.html')) {
@@ -123,18 +122,21 @@ async function createHoneycombBlock(jsPsych) {
   //     ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
   //     : fixationSettings.default_duration,
   // });
+
+  let lastDebriefTrialIndex = 0;  
   
   // const completeMarkup = await fetchHtmlContentIfNeeded(debriefLanguage.completeBlock);
   const debriefTrial = (jsPsych) => ({
     type: jsPsychHtmlButtonResponse,
     stimulus: () => {
-      const responseTrials = jsPsych.data.get().filter({ task: "response" });
+      const responseTrials = jsPsych.data.get().filterCustom(trial => trial.trial_index > lastDebriefTrialIndex && trial.task === "response");
       const correct_trials = responseTrials.filter({ correct: true });
       let accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
       const debriefLanguage = honeycombLanguage.debrief;
       if (isNaN(accuracy)) {
 	accuracy = 0;
-      } 
+      }
+      lastDebriefTrialIndex = jsPsych.data.get().last(1).values()[0].trial_index;      
       
       const header = debriefLanguage.header;
       const accuracyMarkup = p(
@@ -146,6 +148,7 @@ async function createHoneycombBlock(jsPsych) {
       return header + body(div(accuracyMarkup + breakMarkup + completeBlockMarkup, { class: "container" }));
     },
     choices: ["Continue"],
+    
     data: {
       task: "Block Debrief",
     },
@@ -546,8 +549,46 @@ function createPracticeTrial(jsPsych) {
 
   return timeline;
 }
+  
+const createDebriefTrial = (jsPsych) => ({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: () => {
+    // Note that we need the jsPsych instance to aggregate the data
+    const responseTrials = jsPsych.data.get().filter({ task: "response" });
+    const correct_trials = responseTrials.filter({ correct: true });
+    let accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
+    // const reactionTime = Math.round(correct_trials.select("rt").mean());
+    const debriefLanguage = honeycombLanguage.debrief;
+
+    if (isNaN(accuracy)) {
+      accuracy = 0;
+    }
+
+    const header = debriefLanguage.header;    
+    const accuracyMarkup = p(
+      debriefLanguage.accuracy.experiment.start + b(accuracy) + debriefLanguage.accuracy.experiment.end
+    );
+    const completeMarkup = p(debriefLanguage.complete);
+
+    // Display the accuracy, reaction time, and complete message as 3 paragraphs in a row
+    return header + body(div(accuracyMarkup + completeMarkup, { class: "container" }));
+  },
+  choices: ["Continue"],
+  
+  on_load: async () => {
+    // Prepare data to save	  
+    if (process.env.REACT_APP_DEV === "true") {
+      jsPsych.data.get().localSave("csv", "tutorial_experiment.csv");
+    }
+  },
+  
+  data: {
+    task: "Final Debrief",
+  },
+});
 
 export {
+  createDebriefTrial,
   createHoneycombBlock,
   createWalkthroughTrial,
   createPracticeTrial,

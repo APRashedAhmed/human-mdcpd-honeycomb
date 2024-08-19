@@ -1,6 +1,5 @@
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
 import {
-  createDebriefTrial,
   finishTrial,
   preloadTrial,
   welcomeTrial,
@@ -8,6 +7,7 @@ import {
   prolificTrial
 } from "../trials/honeycombTrials";
 import {
+  createDebriefTrial,
   createHoneycombBlock,
   createWalkthroughTrial,
   createPracticeTrial,
