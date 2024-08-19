@@ -79,16 +79,28 @@ async function initParticipant(studyID, participantID, startDate) {
  * Each trial is its own document in the "trials" subcollection
  * @param {any} data The JsPsych data object from a single trial
  */
-async function addToFirebase(data) {
+async function addToFirebase(data, retries = 3) {
   const studyID = data.study_id;
   const participantID = data.participant_id;
   const startDate = data.start_date;
 
-  try {
-    const experiment = getExperimentRef(studyID, participantID, startDate);
-    await experiment.update('trials', firebase.firestore.FieldValue.arrayUnion(data));
-  } catch (error) {
-    console.error("Unable to add trial:\n", error);
+  console.log("firebase data:\n", data);
+
+  const experiment = getExperimentRef(studyID, participantID, startDate);
+
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      await experiment.update('trials', firebase.firestore.FieldValue.arrayUnion(data));
+      console.log("Data successfully added to Firebase");
+      break; // Exit loop if successful
+    } catch (error) {
+      console.error(`Attempt ${attempt} failed: Unable to add trial:\n`, error);
+
+      if (attempt === retries) {
+        console.error("Max retries reached. Data was not added to Firebase.");
+        throw error; // Re-throw the error if max retries reached
+      }
+    }
   }
 }
 
