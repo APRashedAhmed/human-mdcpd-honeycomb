@@ -18,6 +18,16 @@ Then you can install the packages required for the repo:
 npm install
 ```
 
+Setup a service account to authorize repo access to firebase without logging in 
+directly by following the directions in [this link](https://honeycomb.ccv.brown.edu/docs/firebase#setting-up-a-service-account)
+for the repo:
+1. Navigate to the [service accounts](https://console.firebase.google.com/u/0/project/human-mdcpd-honeycomb-6b769/settings/serviceaccounts/adminsdk)
+tab for the project
+2. Near the bottom, click `Generate new Private key` and then `Generate Key`,
+which should download the key
+3. Rename the key to `firebase-service-account.json` and move it to the root 
+directory of the repo, ensuring it isn't being tracked by git
+
 ## Running Locally
 
 The task is setup to run on Firebase but can be run locally for development purposes.
@@ -64,3 +74,46 @@ github action to the following URL:
 Note that the github action will redeploy the task on every change to the `main`
 branch, therefore be mindful of when updates are made to it if experiments are
 ongoing.
+
+## Downloading Participant Data
+
+Default honeycomb only provided code to download data for participants one at a
+time. To get around this, an [extra script](https://github.com/APRashedAhmed/hmdcpd-analysis/blob/main/src/hmdcpd/download.py)
+was put together to create a list of all valid participant IDs from the 
+demographics data, which is then passed to a modified version of the CLI. To use
+the script, navigate to the [project repo](https://github.com/APRashedAhmed/hmdcpd-analysis) 
+and install it using the instructions.
+
+Once installed, download the demographics data for the study of interest by 
+navigating to the prolific study page and clicking "Download Demographic Data":
+
+<div align="center">
+	<img src="assets/images/download_demo.png" alt="Demographics" width="80%" />
+</div>
+
+Rename the file to reflect the task version it represents (for example 
+`hbb_v1_1_0.csv`) and then run the following in a `python` shell:
+
+```python
+from pathlib import Path
+from hmdcpd import download
+
+FILE_PATH = Path("<PATH_TO_DEMOGRAPHICS_DATA>")
+OUT_DIR = Path("<PATH_TO_OUTPUT_DIRECTORY>")
+OUT_FILENAME = "participant_ids"
+
+download.extract_participant_ids(
+	path_demo=FILE_PATH,
+	dir_base=OUT_DIR,
+	write_to_filename=OUT_FILENAME,
+)
+```
+
+Then run the CLI from the task directory:
+
+```bash
+npm run cli
+```
+
+Select `Download All Data`, enter the study ID of interest, the path to the 
+generated list of participant IDs, and the location to download the data to.
