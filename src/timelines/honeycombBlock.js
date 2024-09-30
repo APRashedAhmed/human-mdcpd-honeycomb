@@ -547,11 +547,36 @@ function createPracticeTrial(jsPsych) {
     },
   };
 
+  const sliderTrial = {
+    type: jsPsychHtmlSliderResponse,
+    stimulus: function () {
+      const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].response);
+
+      let question = `<p>You chose <span style='color: ${user_color}'><b>${user_color}</b></span> 
+      how confident are you in your response?</p>`;
+      return "<div>" + question + "</div>";
+    },
+    trial_duration: taskSettings.sliderTrial.trial_duration,
+    slider_start: function () {
+      return Math.random() * 100; // Re-randomize for each trial
+    },
+    on_start: function (trial) {
+      const lastTrialData = jsPsych.data.getLastTrialData().trials[0];
+      trial.data = {
+        user_color: lastTrialData.response,
+      };
+    },
+    button_label: "Next",
+    labels: ["0%", "100%"],
+    step: 0.001,
+  };
+
   const answerTrial = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function () {
       const correct_color = getColor(jsPsych.timelineVariable("correct_response"));
-      const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].response);
+      const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].user_color);
+      console.log(jsPsych.data.getLastTrialData(), "answerTrial");
 
       let user_answer;
       if (user_color === undefined) {
@@ -575,7 +600,7 @@ function createPracticeTrial(jsPsych) {
   ];
 
   const timeline = {
-    timeline: [fixation, videoTrial, fixation, choiceTrial, answerTrial],
+    timeline: [fixation, videoTrial, fixation, choiceTrial, sliderTrial, answerTrial],
     timeline_variables: trial_videos,
     randomize_order: true, //shuffle videos within blocks
   };
