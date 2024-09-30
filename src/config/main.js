@@ -74,7 +74,10 @@ let taskSettings = {
   },
   choiceTrial: {
     trial_duration: 10000,
-  }
+  },
+  sliderTrial: {
+    trial_duration: 10000,
+  },
 };
 try {
   taskSettings = _.merge(
