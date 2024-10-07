@@ -3,7 +3,7 @@ import jsPsychHtmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response"
 import jsPsychHtmlButtonResponse from "@jspsych/plugin-html-button-response";
 import jsPsychVideoButtonResponse from "@jspsych/plugin-video-button-response";
 import jsPsychHtmlSliderResponse from "@jspsych/plugin-html-slider-response";
-// import jsPsychHtmlKeyboardSlider from "@jspsych-contrib/plugin-html-keyboard-slider";
+
 import jsPsychPreload from "@jspsych/plugin-preload";
 import instructionsResponse from "@jspsych/plugin-instructions";
 import Papa from "papaparse";
@@ -26,16 +26,16 @@ async function fetchHtmlContentIfNeeded(content) {
   return p(content);
 }
 
-const getColor = (string) => {
+const getColor = (number) => {
   let color;
-  switch (string) {
-    case "1":
+  switch (number) {
+    case 0:
       color = "red";
       break;
-    case "2":
+    case 1:
       color = "green";
       break;
-    case "3":
+    case 2:
       color = "blue";
       break;
   }
@@ -89,13 +89,13 @@ async function createHoneycombBlock(jsPsych) {
       let correct_resp = "";
       switch (fileName.charAt(fileName.length - 5)) {
         case "d":
-          correct_resp = "1";
+          correct_resp = 0;
           break;
         case "n":
-          correct_resp = "2";
+          correct_resp = 1;
           break;
         case "e":
-          correct_resp = "3";
+          correct_resp = 2;
           break;
         default:
           break;
@@ -238,7 +238,7 @@ async function createHoneycombBlock(jsPsych) {
   }
 
   const choiceTrial = {
-    type: jsPsychHtmlKeyboardResponse,
+    type: jsPsychHtmlButtonResponse,
     stimulus: function () {
       let question = "<p>What color was the ball at the end of the video?<p>";
       let choices = `
@@ -250,14 +250,17 @@ async function createHoneycombBlock(jsPsych) {
       return "<div>" + question + choices + "</div>";
     },
     trial_duration: taskSettings.choiceTrial.trial_duration,
-    choices: ["1", "2", "3"],
+    choices: ["Red", "Green", "Blue"],
     response_ends_trial: true,
     data: {
       task: "response",
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     on_finish: function (data) {
-      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+      data.correct = jsPsych.pluginAPI.compareKeys(
+        data.response.toString(),
+        data.correct_response.toString()
+      );
       console.log(data.correct);
       var proportion_complete = jsPsych.getProgressBarCompleted();
       console.log(proportion_complete);
@@ -382,7 +385,6 @@ async function createEndInstructionsTrial() {
 async function createWalkthroughTrial(jsPsych) {
   const fixation = {
     type: jsPsychHtmlKeyboardResponse,
-    // stimulus: '<div style="font-size:60px;">+</div>',
     stimulus: " ",
     choices: "NO_KEYS",
     trial_duration: 250,
@@ -403,27 +405,32 @@ async function createWalkthroughTrial(jsPsych) {
   };
 
   const choiceTrial = {
-    type: jsPsychHtmlKeyboardResponse,
+    type: jsPsychHtmlButtonResponse,
     stimulus: function () {
       let question = "<p>What color was the ball at the end of the video?<p>";
       let choices = `
               <div style='text-align: center;'>
-                  <span style='color: red; margin-right: 5px;'  >(1) <b>Red</b><br></span>
-                  <span style='color: green; margin-left: 15px;'>(2) <b>Green</b><br></span>
-                  <span style='color: blue;'                    >(3) <b>Blue</b><br></span>
+                  <span style='color: red; margin-right: 5px;'  ><b>Red</b><br></span>
+                  <span style='color: green; margin-left: 15px;'><b>Green</b><br></span>
+                  <span style='color: blue;'                    ><b>Blue</b><br></span>
               </div>`;
       return "<div>" + question + choices + "</div>";
     },
     // trial_duration: 10000,
-    choices: ["1", "2", "3"],
+    choices: ["Red", "Green", "Blue"],
     response_ends_trial: true,
     data: {
       task: "response",
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     on_finish: function (data) {
-      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+      data.correct = jsPsych.pluginAPI.compareKeys(
+        data.response.toString(),
+        data.correct_response.toString()
+      );
       console.log(data.correct);
+      console.log(data.response, "response");
+      console.log(data.correct_response, "correct response");
     },
   };
 
@@ -449,27 +456,27 @@ async function createWalkthroughTrial(jsPsych) {
     const trial_videos = [
       {
         stimulus: ["assets/videos/walkthrough/1_demonstrate_task_physics_and_color_green.mp4"],
-        correct_response: "2",
+        correct_response: 1,
         text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_1),
       },
       {
         stimulus: ["assets/videos/walkthrough/2_lower_number_of_changes_red.mp4"],
-        correct_response: "1",
+        correct_response: 0,
         text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_2),
       },
       {
         stimulus: ["assets/videos/walkthrough/3_higher_number_of_changes_blue.mp4"],
-        correct_response: "3",
+        correct_response: 2,
         text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_3),
       },
       {
         stimulus: ["assets/videos/walkthrough/4_introduce_the_grayzone_red.mp4"],
-        correct_response: "1",
+        correct_response: 0,
         text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_4),
       },
       {
         stimulus: ["assets/videos/walkthrough/5_videos_end_in_the_grayzone_green.mp4"],
-        correct_response: "2",
+        correct_response: 1,
         text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_5),
       },
     ];
@@ -523,26 +530,29 @@ function createPracticeTrial(jsPsych) {
   };
 
   const choiceTrial = {
-    type: jsPsychHtmlKeyboardResponse,
+    type: jsPsychHtmlButtonResponse,
     stimulus: function () {
       let question = "<p>What color was the ball at the end of the video?<p>";
       let choices = `
               <div style='text-align: center;'>
-                  <span style='color: red; margin-right: 5px;'  >(1) <b>Red</b><br></span>
-                  <span style='color: green; margin-left: 15px;'>(2) <b>Green</b><br></span>
-                  <span style='color: blue;'                    >(3) <b>Blue</b><br></span>
+                  <span style='color: red; margin-right: 5px;'  ><b>Red</b><br></span>
+                  <span style='color: green; margin-left: 15px;'><b>Green</b><br></span>
+                  <span style='color: blue;'                    ><b>Blue</b><br></span>
               </div>`;
       return "<div>" + question + choices + "</div>";
     },
     trial_duration: taskSettings.choiceTrial.trial_duration,
-    choices: ["1", "2", "3"],
+    choices: ["Red", "Green", "Blue"],
     response_ends_trial: true,
     data: {
       task: "response",
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     on_finish: function (data) {
-      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+      data.correct = jsPsych.pluginAPI.compareKeys(
+        data.response.toString(),
+        data.correct_response.toString()
+      );
       console.log(data.correct);
     },
   };
@@ -592,11 +602,11 @@ function createPracticeTrial(jsPsych) {
   };
 
   const trial_videos = [
-    { stimulus: ["assets/videos/examples/ex_1_red.mp4"], correct_response: "1" },
-    { stimulus: ["assets/videos/examples/ex_5_green.mp4"], correct_response: "2" },
-    { stimulus: ["assets/videos/examples/ex_7_blue.mp4"], correct_response: "3" },
-    { stimulus: ["assets/videos/examples/ex_10_green.mp4"], correct_response: "2" },
-    { stimulus: ["assets/videos/examples/ex_2_red.mp4"], correct_response: "1" },
+    { stimulus: ["assets/videos/examples/ex_1_red.mp4"], correct_response: 0 },
+    { stimulus: ["assets/videos/examples/ex_5_green.mp4"], correct_response: 1 },
+    { stimulus: ["assets/videos/examples/ex_7_blue.mp4"], correct_response: 2 },
+    { stimulus: ["assets/videos/examples/ex_10_green.mp4"], correct_response: 1 },
+    { stimulus: ["assets/videos/examples/ex_2_red.mp4"], correct_response: 0 },
   ];
 
   const timeline = {
