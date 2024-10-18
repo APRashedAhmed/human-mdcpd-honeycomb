@@ -241,16 +241,18 @@ async function createHoneycombBlock(jsPsych) {
     type: jsPsychHtmlButtonResponse,
     stimulus: function () {
       let question = "<p>What color was the ball at the end of the video?<p>";
-      let choices = `
-              <div style='text-align: center;'>
-                  <span style='color: red; margin-right: 5px;'  >(1) <b>Red</b><br></span>
-                  <span style='color: green; margin-left: 15px;'>(2) <b>Green</b><br></span>
-                  <span style='color: blue;'                    >(3) <b>Blue</b><br></span>
-              </div>`;
-      return "<div>" + question + choices + "</div>";
+      // let choices = `
+      //         <div style='text-align: center;'>
+      //             <span style='color: red; margin-right: 5px;'  >(1) <b>Red</b><br></span>
+      //             <span style='color: green; margin-left: 15px;'>(2) <b>Green</b><br></span>
+      //             <span style='color: blue;'                    >(3) <b>Blue</b><br></span>
+      //         </div>`;
+      return "<div>" + question + "</div>";
     },
     trial_duration: taskSettings.choiceTrial.trial_duration,
     choices: ["Red", "Green", "Blue"],
+    button_html:
+      '<button class="jspsych-btn" style="color: %choice%; margin: 0 5px;">%choice%</button>',
     response_ends_trial: true,
     data: {
       task: "response",
@@ -408,16 +410,18 @@ async function createWalkthroughTrial(jsPsych) {
     type: jsPsychHtmlButtonResponse,
     stimulus: function () {
       let question = "<p>What color was the ball at the end of the video?<p>";
-      let choices = `
-              <div style='text-align: center;'>
-                  <span style='color: red; margin-right: 5px;'  ><b>Red</b><br></span>
-                  <span style='color: green; margin-left: 15px;'><b>Green</b><br></span>
-                  <span style='color: blue;'                    ><b>Blue</b><br></span>
-              </div>`;
-      return "<div>" + question + choices + "</div>";
+      // let choices = `
+      //         <div style='text-align: center;'>
+      //             <span style='color: red; margin-right: 5px;'  ><b>Red</b><br></span>
+      //             <span style='color: green; margin-left: 15px;'><b>Green</b><br></span>
+      //             <span style='color: blue;'                    ><b>Blue</b><br></span>
+      //         </div>`;
+      return "<div>" + question + "</div>";
     },
     // trial_duration: 10000,
     choices: ["Red", "Green", "Blue"],
+    button_html:
+      '<button class="jspsych-btn" style="color: %choice%; margin: 0 5px;">%choice%</button>',
     response_ends_trial: true,
     data: {
       task: "response",
@@ -533,16 +537,18 @@ function createPracticeTrial(jsPsych) {
     type: jsPsychHtmlButtonResponse,
     stimulus: function () {
       let question = "<p>What color was the ball at the end of the video?<p>";
-      let choices = `
-              <div style='text-align: center;'>
-                  <span style='color: red; margin-right: 5px;'  ><b>Red</b><br></span>
-                  <span style='color: green; margin-left: 15px;'><b>Green</b><br></span>
-                  <span style='color: blue;'                    ><b>Blue</b><br></span>
-              </div>`;
-      return "<div>" + question + choices + "</div>";
+      // let choices = `
+      //         <div style='text-align: center;'>
+      //             <span style='color: red; margin-right: 5px;'  ><b>Red</b><br></span>
+      //             <span style='color: green; margin-left: 15px;'><b>Green</b><br></span>
+      //             <span style='color: blue;'                    ><b>Blue</b><br></span>
+      //         </div>`;
+      return "<div>" + question + "</div>";
     },
     trial_duration: taskSettings.choiceTrial.trial_duration,
     choices: ["Red", "Green", "Blue"],
+    button_html:
+      '<button class="jspsych-btn" style="color: %choice%; margin: 0 5px;">%choice%</button>',
     response_ends_trial: true,
     data: {
       task: "response",
