@@ -78,6 +78,9 @@ let taskSettings = {
   sliderTrial: {
     trial_duration: 10000,
   },
+  waitTrial: {
+    trial_duration: 5000,
+  },
 };
 try {
   taskSettings = _.merge(

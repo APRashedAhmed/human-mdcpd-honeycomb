@@ -124,20 +124,6 @@ async function createHoneycombBlock(jsPsych) {
     return shuffle(block_videos);
   };
 
-  /**
-   * Displays a fixation dot at the center of the screen.
-   *
-   * The settings for this trial are loaded from taskSettings.fixation:
-   *    If randomize_duration is true the dot is shown for default_duration
-   *    Otherwise, a random value is selected from durations
-   */
-  // TODO #280: Pull fixation trial into Honeycomb directly
-  // const fixationTrial = fixation(config, {
-  //   duration: fixationSettings.trial_duration
-  //     ? jsPsych.randomization.sampleWithoutReplacement(fixationSettings.durations, 1)[0]
-  //     : fixationSettings.default_duration,
-  // });
-
   let lastDebriefTrialIndex = 0;
 
   // const completeMarkup = await fetchHtmlContentIfNeeded(debriefLanguage.completeBlock);
@@ -259,10 +245,9 @@ async function createHoneycombBlock(jsPsych) {
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     on_finish: function (data) {
-      data.correct = jsPsych.pluginAPI.compareKeys(
-        data.response.toString(),
-        data.correct_response.toString()
-      );
+      data.correct = data.response
+        ? jsPsych.pluginAPI.compareKeys(data.response.toString(), data.correct_response.toString())
+        : false;
       console.log(data.correct);
       var proportion_complete = jsPsych.getProgressBarCompleted();
       console.log(proportion_complete);
@@ -270,7 +255,7 @@ async function createHoneycombBlock(jsPsych) {
     },
   };
 
-  const sliderTrial = {
+  var sliderTrial = {
     type: jsPsychHtmlSliderResponse,
     stimulus: function () {
       const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].response);
@@ -286,6 +271,65 @@ async function createHoneycombBlock(jsPsych) {
     button_label: "Next",
     labels: ["0%", "100%"],
     step: 0.001,
+  };
+
+  // Conditional wrapper to determine if sliderTrial should be shown
+  var conditionalSliderTrial = {
+    timeline: [sliderTrial],
+    conditional_function: function () {
+      const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].response);
+
+      console.log("user_color", user_color);
+      // Return true if user_color is defined, false to skip this trial
+      return typeof user_color !== "undefined";
+    },
+  };
+
+  var waitTrial = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: function () {
+      var choiceData = jsPsych.data
+        .get()
+        .filter({ trial_type: "html-button-response" })
+        .last(1)
+        .values()[0];
+      var isChoiceUndefined = choiceData.response === undefined || choiceData.response === null;
+      let reason;
+      if (isChoiceUndefined) {
+        reason = honeycombLanguage.wait.color;
+      } else {
+        reason = honeycombLanguage.wait.confidence;
+      }
+      return "<div>" + reason + honeycombLanguage.wait.wait + "</div>";
+    },
+    trial_duration: taskSettings.waitTrial.trial_duration,
+    response_ends_trial: false,
+  };
+
+  // Conditional wrapper to show a waiting screen if user_color is undefined
+  var conditionalWaitTrial = {
+    timeline: [waitTrial],
+    conditional_function: function () {
+      var choiceData = jsPsych.data
+        .get()
+        .filter({ trial_type: "html-button-response" })
+        .last(1)
+        .values()[0];
+      var isChoiceUndefined = choiceData.response === undefined || choiceData.response === null;
+      if (isChoiceUndefined) {
+        return true;
+      }
+      // Get the data from the slider trial
+      var sliderData = jsPsych.data
+        .get()
+        .filter({ trial_type: "html-slider-response" })
+        .last(1)
+        .values()[0];
+      var isSliderUndefined = sliderData.response === undefined || sliderData.response === null;
+
+      // Return true to show the wait trial if either is undefined, otherwise false to skip it
+      return isSliderUndefined;
+    },
   };
 
   const videoBlocks = await generateTrialMetadata();
@@ -310,7 +354,14 @@ async function createHoneycombBlock(jsPsych) {
 
     // Add the main block of trials
     const videoProcedure = {
-      timeline: [fixation, videoTrial, fixation, choiceTrial, sliderTrial],
+      timeline: [
+        fixation,
+        videoTrial,
+        fixation,
+        choiceTrial,
+        conditionalSliderTrial,
+        conditionalWaitTrial,
+      ],
       timeline_variables: videoBlock,
       randomize_order: true, //shuffle videos within blocks
       on_timeline_start: async () => {
@@ -428,17 +479,13 @@ async function createWalkthroughTrial(jsPsych) {
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     on_finish: function (data) {
-      data.correct = jsPsych.pluginAPI.compareKeys(
-        data.response.toString(),
-        data.correct_response.toString()
-      );
-      console.log(data.correct);
-      console.log(data.response, "response");
-      console.log(data.correct_response, "correct response");
+      data.correct = data.response
+        ? jsPsych.pluginAPI.compareKeys(data.response.toString(), data.correct_response.toString())
+        : false;
     },
   };
 
-  const sliderTrial = {
+  var sliderTrial = {
     type: jsPsychHtmlSliderResponse,
     stimulus: function () {
       const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].response);
@@ -447,7 +494,6 @@ async function createWalkthroughTrial(jsPsych) {
       how confident are you in your response?</p>`;
       return "<div>" + question + "</div>";
     },
-    trial_duration: taskSettings.sliderTrial.trial_duration,
     slider_start: function () {
       return Math.random() * 100; // Re-randomize for each trial
     },
@@ -555,15 +601,19 @@ function createPracticeTrial(jsPsych) {
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     on_finish: function (data) {
-      data.correct = jsPsych.pluginAPI.compareKeys(
-        data.response.toString(),
-        data.correct_response.toString()
-      );
+      data.correct = data.response
+        ? jsPsych.pluginAPI.compareKeys(data.response.toString(), data.correct_response.toString())
+        : false;
+
+      // data.correct = data.response ? jsPsych.pluginAPI.compareKeys(
+      // 	data.response,
+      // 	data.correct_response
+      // ) : false;
       console.log(data.correct);
     },
   };
 
-  const sliderTrial = {
+  var sliderTrial = {
     type: jsPsychHtmlSliderResponse,
     stimulus: function () {
       const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].response);
@@ -576,26 +626,83 @@ function createPracticeTrial(jsPsych) {
     slider_start: function () {
       return Math.random() * 100; // Re-randomize for each trial
     },
-    on_start: function (trial) {
-      const lastTrialData = jsPsych.data.getLastTrialData().trials[0];
-      trial.data = {
-        user_color: lastTrialData.response,
-      };
-    },
     button_label: "Next",
     labels: ["0%", "100%"],
     step: 0.001,
+  };
+
+  // Conditional wrapper to determine if sliderTrial should be shown
+  var conditionalSliderTrial = {
+    timeline: [sliderTrial],
+    conditional_function: function () {
+      const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].response);
+
+      console.log("user_color", user_color);
+      // Return true if user_color is defined, false to skip this trial
+      return typeof user_color !== "undefined";
+    },
+  };
+
+  var waitTrial = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: function () {
+      var choiceData = jsPsych.data
+        .get()
+        .filter({ trial_type: "html-button-response" })
+        .last(1)
+        .values()[0];
+      var isChoiceUndefined = choiceData.response === undefined || choiceData.response === null;
+      let reason;
+      if (isChoiceUndefined) {
+        reason = honeycombLanguage.wait.color;
+      } else {
+        reason = honeycombLanguage.wait.confidence;
+      }
+      return "<div>" + reason + honeycombLanguage.wait.wait + "</div>";
+    },
+    trial_duration: taskSettings.waitTrial.trial_duration,
+    response_ends_trial: false,
+  };
+
+  // Conditional wrapper to show a waiting screen if user_color is undefined
+  var conditionalWaitTrial = {
+    timeline: [waitTrial],
+    conditional_function: function () {
+      var choiceData = jsPsych.data
+        .get()
+        .filter({ trial_type: "html-button-response" })
+        .last(1)
+        .values()[0];
+      var isChoiceUndefined = choiceData.response === undefined || choiceData.response === null;
+      if (isChoiceUndefined) {
+        return true;
+      }
+      // Get the data from the slider trial
+      var sliderData = jsPsych.data
+        .get()
+        .filter({ trial_type: "html-slider-response" })
+        .last(1)
+        .values()[0];
+      var isSliderUndefined = sliderData.response === undefined || sliderData.response === null;
+
+      // Return true to show the wait trial if either is undefined, otherwise false to skip it
+      return isSliderUndefined;
+    },
   };
 
   const answerTrial = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function () {
       const correct_color = getColor(jsPsych.timelineVariable("correct_response"));
-      const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].user_color);
+      const user_color = getColor(
+        jsPsych.data.get().filter({ trial_type: "html-button-response" }).last(1).values()[0]
+          .response
+      );
+      // const user_color = getColor(jsPsych.data.getLastTrialData().trials[0].user_color);
       console.log(jsPsych.data.getLastTrialData(), "answerTrial");
 
       let user_answer;
-      if (user_color === undefined) {
+      if (user_color === undefined || user_color === null) {
         user_answer = "<p>You did not choose a color in time.</p>";
       } else {
         user_answer = `<p>You chose <span style='color: ${user_color}'> <b>${user_color}</b>.<span>`;
@@ -616,7 +723,15 @@ function createPracticeTrial(jsPsych) {
   ];
 
   const timeline = {
-    timeline: [fixation, videoTrial, fixation, choiceTrial, sliderTrial, answerTrial],
+    timeline: [
+      fixation,
+      videoTrial,
+      fixation,
+      choiceTrial,
+      conditionalSliderTrial,
+      conditionalWaitTrial,
+      answerTrial,
+    ],
     timeline_variables: trial_videos,
     randomize_order: true, //shuffle videos within blocks
   };
