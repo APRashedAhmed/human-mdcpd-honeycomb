@@ -5,11 +5,7 @@
   },
   "hosting": {
     "public": "build",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
@@ -22,7 +18,7 @@
       "port": 8080
     },
     "hosting": {
-      "port": 5000
+      "port": 6000
     },
     "ui": {
       "enabled": true
