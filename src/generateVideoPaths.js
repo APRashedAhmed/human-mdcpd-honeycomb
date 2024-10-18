@@ -10,7 +10,8 @@ async function getVideoFilePaths() {
     "public",
     "assets",
     "videos",
-    "hbb_dataset_240409_121323"
+    "hbb_dataset_241017_184533_2359798956",
+    "videos",
   );
   let videoFilePaths = [];
   const blocks = await fs.readdir(directoryPath);

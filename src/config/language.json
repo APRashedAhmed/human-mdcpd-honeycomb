@@ -57,7 +57,12 @@
         "completeBlock": "<br>When you are ready, click <b>continue</b> to begin the next block.",
         "complete": "<br>Press <b>continue</b> to exit full screen and move onto the prolific payment screen."
       },
-      "finish": "This experiment has ended."
+      "finish": "This experiment has ended.",
+      "wait": {
+	"color": "You did not choose a color in time.",
+	"confidence": "You did not choose a confidence in time.",
+	"wait": "The next trial will begin in 5 seconds."
+      }
     },
     "adjustVolume": "Set tablet volume to 50/100.",
     "camera": {

@@ -1,19 +1,19 @@
 import { enterFullscreen, exitFullscreen } from "../trials/fullscreen";
 import {
-  finishTrial,
-  preloadTrial,
   welcomeTrial,
   consentTrial,
+  preloadTrial,
   prolificTrial,
+  finishTrial,
 } from "../trials/honeycombTrials";
 import {
-  createDebriefTrial,
-  createHoneycombBlock,
-  createWalkthroughTrial,
-  createPracticeTrial,
   createStartInstructionsTrial,
   createEndInstructionsTrial,
+  createWalkthroughTrial,
   createEndWalkthroughTrial,
+  createPracticeTrial,
+  createHoneycombBlock,
+  createDebriefTrial,
 } from "./honeycombBlock";
 
 async function createHoneycombTimeline(jsPsych) {
