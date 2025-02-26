@@ -105,12 +105,14 @@ from hmdcpd import download
 
 FILE_PATH = Path("<PATH_TO_DEMOGRAPHICS_DATA>")
 OUT_DIR = Path("<PATH_TO_OUTPUT_DIRECTORY>")
-OUT_FILENAME = "participant_ids"
+OUT_FILENAME = "hbb_participant_ids"
+VERSION = "<VERSION>"
 
 download.extract_participant_ids(
 	path_demo=FILE_PATH,
 	dir_base=OUT_DIR,
 	write_to_filename=OUT_FILENAME,
+	version=VERSION,
 )
 ```
 
