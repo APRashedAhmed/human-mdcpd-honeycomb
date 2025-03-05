@@ -2,8 +2,8 @@ import { checkbox, confirm, expand, input, select } from "@inquirer/prompts";
 import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import fsExtra from "fs-extra";
-import { parse } from 'json2csv';
-import readline from "readline"
+import { parse } from "json2csv";
+import readline from "readline";
 
 /** -------------------- GLOBALS -------------------- */
 
@@ -24,14 +24,14 @@ const INVALID_DEPLOYMENT_ERROR = new Error("Invalid deployment: " + DEPLOYMENT);
 
 async function main() {
   // TODO 289: User should be able to pass command line arguments OR inquirer (especially for action)
-  //MAO note -> the Participant and ID prompt variables are inside certain cases as they are not 
+  //MAO note -> the Participant and ID prompt variables are inside certain cases as they are not
   //needed for downloadAll
   ACTION = await actionPrompt();
   DEPLOYMENT = await deploymentPrompt();
   STUDY_ID = await studyIDPrompt();
   PARTICIPANT_IDS_PATH = await participantIDsPathPrompt();
   PARTICIPANT_IDS = participantIDAll();
-  
+
   switch (ACTION) {
     case "download":
       PARTICIPANT_ID = await participantIDPrompt();
@@ -58,73 +58,73 @@ async function main() {
       break;
     case "downloadAll":
       OUTPUT_ROOT = await savePathPrompt(); // call this before running
-    
-      switch (DEPLOYMENT){
+
+      switch (DEPLOYMENT) {
         case "firebase":
           await downloadAllDataFirebase();
-        break;
-      default:
-        throw INVALID_DEPLOYMENT_ERROR;
+          break;
+        default:
+          throw INVALID_DEPLOYMENT_ERROR;
       }
-  break;
-default:
-  throw INVALID_ACTION_ERROR;
-}
+      break;
+    default:
+      throw INVALID_ACTION_ERROR;
+  }
 }
 main();
 
 /** -------------------- DOWNLOAD ALL ACTION -------------------- */
 
-async function downloadAllDataFirebase(){
+async function downloadAllDataFirebase() {
   let overwriteAll = false;
   const studyRoot = `${OUTPUT_ROOT}/${RESPONSES_COL}/${STUDY_ID}`.replaceAll(":", "_");
   console.log(`Saving data to: ${studyRoot}`);
-  
-  // loop through participant Ids and download each file 
-  for(const pID of PARTICIPANT_IDS){
-    // download all experiments subjects do 
+
+  // loop through participant Ids and download each file
+  for (const pID of PARTICIPANT_IDS) {
+    // download all experiments subjects do
     EXPERIMENT_IDS = await experimentIDAll(pID);
     // Download the files asynchronously, but sequentially
-    for (const experimentID of EXPERIMENT_IDS) {  
+    for (const experimentID of EXPERIMENT_IDS) {
       const experimentRef = getExperimentRef(STUDY_ID, pID, experimentID);
       const experimentSnapshot = await experimentRef.get();
       const experimentData = experimentSnapshot.data();
-      
+
       // Merge the experiment's trials' data into a single array
       const trialsRef = experimentRef.collection(TRIALS_COL);
       const trialsSnapshot = await trialsRef.orderBy("trial_index").get();
       const trialsData = trialsSnapshot.docs.map((trial) => trial.data());
-      
+
       // Add the trials' data to the experiment's data as "results" array
       experimentData["results"] = trialsData;
-      
+
       // Get the path of the file to be saved
-      const participantRoot = `${pID}/${experimentID}`.replaceAll(":", "_");  // (":" are replaced to prevent issues with invalid file names)
+      const participantRoot = `${pID}/${experimentID}`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
       const outputFileJSON = `${studyRoot}/${participantRoot}.json`;
-      const outputFileCSV = `${studyRoot}/${participantRoot}.csv`;      
-      
+      const outputFileCSV = `${studyRoot}/${participantRoot}.csv`;
+
       // Determine if the file should be saved
       let shouldDownload;
       if (fsExtra.existsSync(outputFileJSON)) {
         // File exists, check if user wants to overwrite
         const answer = await confirmOverwritePrompt(outputFileJSON, overwriteAll);
         switch (answer) {
-        case "all":
-          overwriteAll = true;
-          shouldDownload = true;
-          break;
-        case "yes":
-          shouldDownload = true;
-          break;
-        default:
-          shouldDownload = false;
-                    break;
+          case "all":
+            overwriteAll = true;
+            shouldDownload = true;
+            break;
+          case "yes":
+            shouldDownload = true;
+            break;
+          default:
+            shouldDownload = false;
+            break;
         }
       } else {
         // File doesn't exist locally - safe to download
         shouldDownload = true;
       }
-      
+
       if (overwriteAll || shouldDownload) {
         // Save the session to a unique JSON file.
         try {
@@ -133,10 +133,10 @@ async function downloadAllDataFirebase(){
           // save data as csv
           const results = experimentData.results;
           const header = {
-                          start_time: experimentData.start_time,
+            start_time: experimentData.start_time,
             app_platform: experimentData.app_platform,
-            app_version: experimentData.app_version
-          }
+            app_version: experimentData.app_version,
+          };
           // Include top-level browser info with the results, as extra columns.
           results.push(header);
           const csv = parse(results);
@@ -179,7 +179,6 @@ async function downloadDataFirebase() {
       `${OUTPUT_ROOT}/${RESPONSES_COL}/` +
       `${STUDY_ID}/${PARTICIPANT_ID}/${experimentID}.csv`.replaceAll(":", "_"); // (":" are replaced to prevent issues with invalid file names)
 
-
     // Determine if the file should be saved
     let shouldDownload;
     if (fsExtra.existsSync(outputFileJSON)) {
@@ -210,9 +209,13 @@ async function downloadDataFirebase() {
         // save data as csv
         const results = experimentData.results;
         const header = {
-            start_time: experimentData.start_time,
-            app_platform: experimentData.app_platform,
-            app_version: experimentData.app_version
+          start_time: experimentData.start_time,
+          app_platform: experimentData.app_platform,
+          app_version: experimentData.app_version,
+        };
+        if (experimentData.app_platform === "MacIntel") {
+          console.log("iPhone platform detected. Exiting the app.");
+          process.exit(1);
         }
         // Include top-level browser info with the results, as extra columns.
         results.push(header);
@@ -345,22 +348,22 @@ async function participantIDPrompt() {
 
 /** Prompt the user to select one or more experiments of the PARTICIPANT_ID on STUDY_ID */
 async function experimentIDPrompt() {
-    const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
+  const dataSnapshot = await getDataRef(STUDY_ID, PARTICIPANT_ID).get();
   // Sort experiment choices by most recent first
-    const choices = dataSnapshot.docs
-      .sort()
-      .reverse()
-      .map(({ id }) => ({ name: id, value: id }));
-  // TO DO : download all sessions automatically 
-    return await checkbox({
-      message: `Select the sessions you would like to ${ACTION}:`,
-      choices: choices,
-    });
-  }
+  const choices = dataSnapshot.docs
+    .sort()
+    .reverse()
+    .map(({ id }) => ({ name: id, value: id }));
+  // TO DO : download all sessions automatically
+  return await checkbox({
+    message: `Select the sessions you would like to ${ACTION}:`,
+    choices: choices,
+  });
+}
 
 /**Called by download all, turns text file into list of participant IDS to loop through */
 // NOTE: not async function because need to get information from other files
-function participantIDAll(){
+function participantIDAll() {
   const PARTICIPANT_IDS = [];
   //const readline = require('readline');
   // const filePath = '/home/apra/work/hmdcpd-analysis/data/participant_demographic_data/participant_ids_v0_0_0.txt' // './participant_responses/participant_ids.txt'
@@ -369,31 +372,31 @@ function participantIDAll(){
   const rl = readline.createInterface({
     input: fileStream,
   });
-    rl.on('line', (line) => {
+  rl.on("line", (line) => {
     PARTICIPANT_IDS.push(line);
     //console.log(`Line from file: ${line}`);
-    });
+  });
   return PARTICIPANT_IDS;
 }
-/**Called by downloadAll, takes in current participant ID and downloads all experiments(no checkbox), 
- * input: participant ID 
+/**Called by downloadAll, takes in current participant ID and downloads all experiments(no checkbox),
+ * input: participant ID
  * output: list of just the names of the experiments
  */
- async function experimentIDAll(pID) {
-    const dataSnapshot = await getDataRef(STUDY_ID, pID).get();
-    const e_ids = [];
+async function experimentIDAll(pID) {
+  const dataSnapshot = await getDataRef(STUDY_ID, pID).get();
+  const e_ids = [];
   // Sort experiment choices by most recent first
-    const choices = dataSnapshot.docs
-      .sort()
-      .reverse()
-      .map(({ id }) => ({ name: id, value: id }));
+  const choices = dataSnapshot.docs
+    .sort()
+    .reverse()
+    .map(({ id }) => ({ name: id, value: id }));
   // TO DO : download automatically if there is only one choice,
   // if not, give them an option?
-    for(let i = 0; i < choices.length; i++){
-      e_ids.push(choices[i].name);
-    }
-    return e_ids;
+  for (let i = 0; i < choices.length; i++) {
+    e_ids.push(choices[i].name);
   }
+  return e_ids;
+}
 
 /** Prompts the user for a file path */
 async function savePathPrompt() {
