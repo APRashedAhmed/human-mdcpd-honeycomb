@@ -10,11 +10,12 @@
   "trials": {
     "honeycomb": {
       "welcome": "Welcome to the experiment. Press <b>next</b> to view the consent form.",
+      "deviceExit": "Please use a <b>desktop<b> device",
       "instructions": {
         "read": "Please read the following instructions carefully.",
         "details": "assets/trials/instructions/details.html",
-	"blocks": "assets/trials/instructions/blocks.html",
-	"prolific": "assets/trials/instructions/prolific.html",	
+        "blocks": "assets/trials/instructions/blocks.html",
+        "prolific": "assets/trials/instructions/prolific.html",
         "example": {
           "start": "If the color of the ball is ",
           "middle": ", press the key ",
@@ -23,45 +24,45 @@
         "spacebar": "When watching a video, if you see a color change or think one is about to occur, press the spacebar",
         "nextTutorial": "assets/trials/instructions/nextTutorial.html",
         "endPractice": "assets/trials/instructions/endPractice.html",
-	"start": "assets/trials/instructions/start.html",
+        "start": "assets/trials/instructions/start.html",
         "next": "Click next to begin."
       },
       "walkthrough": {
-	"video_1": "assets/trials/walkthrough/video_1.html",
-	"video_2": "assets/trials/walkthrough/video_2.html",
-	"video_3": "assets/trials/walkthrough/video_3.html",
-	"video_4": "assets/trials/walkthrough/video_4.html",
-	"video_5": "assets/trials/walkthrough/video_5.html",
-	"endWalkthrough": "assets/trials/walkthrough/end.html"
+        "video_1": "assets/trials/walkthrough/video_1.html",
+        "video_2": "assets/trials/walkthrough/video_2.html",
+        "video_3": "assets/trials/walkthrough/video_3.html",
+        "video_4": "assets/trials/walkthrough/video_4.html",
+        "video_5": "assets/trials/walkthrough/video_5.html",
+        "endWalkthrough": "assets/trials/walkthrough/end.html"
       },
       "endPractice": {
         "instructions": "Much harder wasn't it? Don't worry if you missed a few! The task gets easier as you settle into the rhythm of each trial, so it's okay to miss some as you get comfortable with it. <br><br>"
       },
       "debrief": {
-	"header": "<head><meta charset=\"UTF-8\"><style>.container {width: 90%; margin: 0 auto; text-align: center; padding: 20px;}</style></head>",
+        "header": "<head><meta charset=\"UTF-8\"><style>.container {width: 90%; margin: 0 auto; text-align: center; padding: 20px;}</style></head>",
         "accuracy": {
-	  "block": {
+          "block": {
             "start": "You have completed this block of videos. You responded correctly on ",
             "end": "<b>%</b> of the trials."
-	  },
-	  "experiment": {
+          },
+          "experiment": {
             "start": "You have completed all videos in the experiment. You responded correctly on ",
             "end": "<b>%</b> of all trials."
-	  }
+          }
         },
         "reactionTime": {
           "start": "Your average response time was ",
           "end": "ms."
         },
-	"takeBreak": "Feel free to take a break now for as long as you need, but please make sure to <b>keep this window open</b> until you return.",
+        "takeBreak": "Feel free to take a break now for as long as you need, but please make sure to <b>keep this window open</b> until you return.",
         "completeBlock": "<br>When you are ready, click <b>continue</b> to begin the next block.",
         "complete": "<br>Press <b>continue</b> to exit full screen and move onto the prolific payment screen."
       },
       "finish": "This experiment has ended.",
       "wait": {
-	"color": "You did not choose a color in time.",
-	"confidence": "You did not choose a confidence in time.",
-	"wait": "The next trial will begin in 5 seconds."
+        "color": "You did not choose a color in time.",
+        "confidence": "You did not choose a confidence in time.",
+        "wait": "The next trial will begin in 5 seconds."
       }
     },
     "adjustVolume": "Set tablet volume to 50/100.",

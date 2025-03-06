@@ -1,5 +1,6 @@
 import { config } from "../config/main";
 import { cameraEnd, cameraStart } from "../trials/camera";
+import { deviceExitTrial } from "../trials/honeycombTrials";
 import { createHoneycombTimeline } from "./honeycombTimeline";
 
 /**
@@ -20,6 +21,10 @@ const jsPsychOptions = {
  */
 async function buildTimeline(jsPsych, studyID, participantID) {
   console.log(`Building timeline for participant ${participantID} on study ${studyID}`);
+  if (navigator.platform == "MacIntel") {
+    console.log("Mobile device detected, exiting program.");
+    return [deviceExitTrial];
+  }
   const timeline = await createHoneycombTimeline(jsPsych);
   // Dynamically adds the camera trials to the experiment if config.USE_CAMERA
   if (config.USE_CAMERA) {

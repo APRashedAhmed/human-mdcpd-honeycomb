@@ -31,7 +31,6 @@ async function main() {
   STUDY_ID = await studyIDPrompt();
   PARTICIPANT_IDS_PATH = await participantIDsPathPrompt();
   PARTICIPANT_IDS = participantIDAll();
-
   switch (ACTION) {
     case "download":
       PARTICIPANT_ID = await participantIDPrompt();

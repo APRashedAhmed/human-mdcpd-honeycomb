@@ -1,7 +1,7 @@
 import { showMessage } from "@brown-ccv/behavioral-task-trials";
 import instructionsResponse from "@jspsych/plugin-instructions";
-import jsPsychPreload from '@jspsych/plugin-preload';
-import jsPsychExternalHtml from '@jspsych/plugin-external-html';
+import jsPsychPreload from "@jspsych/plugin-preload";
+import jsPsychExternalHtml from "@jspsych/plugin-external-html";
 
 import { config, language } from "../config/main";
 import { p } from "../lib/markup/tags";
@@ -13,10 +13,13 @@ const honeycombLanguage = language.trials.honeycomb;
  */
 const welcomeTrial = {
   type: instructionsResponse,
-  pages: [
-    p(honeycombLanguage.welcome)
-  ],
+  pages: [p(honeycombLanguage.welcome)],
   show_clickable_nav: true,
+};
+
+const deviceExitTrial = {
+  type: instructionsResponse,
+  pages: [p(honeycombLanguage.deviceExit)],
 };
 
 var consentTrial = {
@@ -34,12 +37,12 @@ const endPracticeTrial = {
 
 /** Trial that loads all of the stimulus images */
 var preloadTrial = {
-    type: jsPsychPreload,
-    show_progress_bar: true,
-    auto_preload: true,    
-    message: 'Loading videos, please wait...',
-    error_message: 'Failed to load videos. Please check your connection and try again.'
-  };
+  type: jsPsychPreload,
+  show_progress_bar: true,
+  auto_preload: true,
+  message: "Loading videos, please wait...",
+  error_message: "Failed to load videos. Please check your connection and try again.",
+};
 
 /** Trial that displays a completion message for 5 seconds */
 const finishTrial = showMessage(config, {
@@ -56,7 +59,8 @@ export {
   finishTrial,
   preloadTrial,
   welcomeTrial,
-  endPracticeTrial,  
+  endPracticeTrial,
   consentTrial,
   prolificTrial,
+  deviceExitTrial,
 };
