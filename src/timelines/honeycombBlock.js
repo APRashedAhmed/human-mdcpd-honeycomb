@@ -454,7 +454,7 @@ async function createWalkthroughTrial(jsPsych) {
     response_ends_trial: true,
     response_allowed_while_playing: false,
     prompt: jsPsych.timelineVariable("text"),
-    controls: true,
+    // controls: true,
   };
 
   const choiceTrial = {
