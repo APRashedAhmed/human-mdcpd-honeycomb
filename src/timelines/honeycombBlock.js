@@ -156,7 +156,7 @@ async function createHoneycombBlock(jsPsych) {
       );
     },
     choices: ["Continue"],
-
+    trial_duration: 300000,
     data: {
       task: "Block Debrief",
     },

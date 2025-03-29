@@ -136,10 +136,6 @@ async function downloadAllDataFirebase() {
             app_platform: experimentData.app_platform,
             app_version: experimentData.app_version,
           };
-          if (experimentData.app_platform === "MacIntel") {
-            console.log("MacIntel platform detected. Exiting the app.");
-            process.exit(1);
-          }
           // Include top-level browser info with the results, as extra columns.
           results.push(header);
           const csv = parse(results);
@@ -216,10 +212,7 @@ async function downloadDataFirebase() {
           app_platform: experimentData.app_platform,
           app_version: experimentData.app_version,
         };
-        if (experimentData.app_platform === "MacIntel") {
-          console.log("iPhone platform detected. Exiting the app.");
-          process.exit(1);
-        }
+
         // Include top-level browser info with the results, as extra columns.
         results.push(header);
         const csv = parse(results);

@@ -21,7 +21,7 @@ const jsPsychOptions = {
  */
 async function buildTimeline(jsPsych, studyID, participantID) {
   console.log(`Building timeline for participant ${participantID} on study ${studyID}`);
-  if (navigator.platform == "MacIntel") {
+  if (navigator.platform == "iPhone") {
     console.log("Mobile device detected, exiting program.");
     return [deviceExitTrial];
   }
