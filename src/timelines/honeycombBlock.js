@@ -155,6 +155,23 @@ async function createHoneycombBlock(jsPsych) {
         body(div(accuracyMarkup + breakMarkup + completeBlockMarkup, { class: "container" }))
       );
     },
+    on_load: function () {
+      var wait_time = 5 * 60 * 1000; // in milliseconds
+      var start_time = performance.now();
+      document.querySelector("button").disabled = true;
+      var interval = setInterval(function () {
+        var time_left = wait_time - (performance.now() - start_time);
+        var minutes = Math.floor(time_left / 1000 / 60);
+        var seconds = Math.floor((time_left - minutes * 1000 * 60) / 1000);
+        var seconds_str = seconds.toString().padStart(2, "0");
+        document.querySelector("#clock").innerHTML = minutes + ":" + seconds_str;
+        if (time_left <= 0) {
+          document.querySelector("#clock").innerHTML = "0:00";
+          document.querySelector("button").disabled = false;
+          clearInterval(interval);
+        }
+      }, 250);
+    },
     choices: ["Continue"],
     trial_duration: 300000,
     data: {
