@@ -29,8 +29,7 @@ async function main() {
   ACTION = await actionPrompt();
   DEPLOYMENT = await deploymentPrompt();
   STUDY_ID = await studyIDPrompt();
-  PARTICIPANT_IDS_PATH = await participantIDsPathPrompt();
-  PARTICIPANT_IDS = participantIDAll();
+  
   switch (ACTION) {
     case "download":
       PARTICIPANT_ID = await participantIDPrompt();
@@ -56,6 +55,8 @@ async function main() {
       }
       break;
     case "downloadAll":
+      PARTICIPANT_IDS_PATH = await participantIDsPathPrompt();
+      PARTICIPANT_IDS = participantIDAll();
       OUTPUT_ROOT = await savePathPrompt(); // call this before running
 
       switch (DEPLOYMENT) {
@@ -136,6 +137,7 @@ async function downloadAllDataFirebase() {
             app_platform: experimentData.app_platform,
             app_version: experimentData.app_version,
           };
+	  
           // Include top-level browser info with the results, as extra columns.
           results.push(header);
           const csv = parse(results);
@@ -212,7 +214,14 @@ async function downloadDataFirebase() {
           app_platform: experimentData.app_platform,
           app_version: experimentData.app_version,
         };
+<<<<<<< Updated upstream
 
+=======
+        // if (experimentData.app_platform === "MacIntel") {
+        //   console.log("iPhone platform detected. Exiting the app.");
+        //   process.exit(1);
+        // }
+>>>>>>> Stashed changes
         // Include top-level browser info with the results, as extra columns.
         results.push(header);
         const csv = parse(results);
