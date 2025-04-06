@@ -130,29 +130,89 @@ async function createHoneycombBlock(jsPsych) {
   const debriefTrial = (jsPsych) => ({
     type: jsPsychHtmlButtonResponse,
     stimulus: () => {
+      const currentLastIndex = lastDebriefTrialIndex; // Save old value
+
       const responseTrials = jsPsych.data
         .get()
         .filterCustom(
-          (trial) => trial.trial_index > lastDebriefTrialIndex && trial.task === "response"
+          (trial) =>
+            trial.trial_index > currentLastIndex &&
+            (trial.task === "response" || trial.trial_type === "html-slider-response")
         );
+
       const correct_trials = responseTrials.filter({ correct: true });
       let accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
       const debriefLanguage = honeycombLanguage.debrief;
       if (isNaN(accuracy)) {
         accuracy = 0;
       }
+
       lastDebriefTrialIndex = jsPsych.data.get().last(1).values()[0].trial_index;
 
+      let validResponseCounter = 0;
+      for (let i = 0; i < responseTrials.count(); i += 2) {
+        const trial1 = responseTrials.values()[i];
+        const trial2 = responseTrials.values()[i + 1];
+        if (trial1 && trial2 && trial1.response !== null && trial2.response !== null) {
+          validResponseCounter++;
+        }
+      }
+
+      const videoTrials = jsPsych.data
+        .get()
+        .filterCustom(
+          (trial) =>
+            trial.trial_index > currentLastIndex && trial.trial_type === "video-keyboard-response"
+        );
+
+      const attentionRatio = Math.round((validResponseCounter / videoTrials.count()) * 100);
+      console.log(attentionRatio);
+
       const header = debriefLanguage.header;
+
+      let accuracyColor;
+      if (accuracy < 33) {
+        accuracyColor = "red";
+      } else if (accuracy >= 33 && accuracy <= 50) {
+        accuracyColor = "yellow";
+      } else {
+        accuracyColor = "green";
+      }
       const accuracyMarkup = p(
-        debriefLanguage.accuracy.block.start + b(accuracy) + debriefLanguage.accuracy.block.end
+        debriefLanguage.accuracy.block.start +
+          `<span style="color: ${accuracyColor};">` +
+          b(accuracy) +
+          `%` +
+          `</span>` +
+          debriefLanguage.accuracy.block.end
+      );
+
+      let attentionColor;
+      if (attentionRatio < 80) {
+        attentionColor = "red";
+      } else if (attentionRatio >= 80 && attentionRatio <= 90) {
+        attentionColor = "yellow";
+      } else {
+        attentionColor = "green";
+      }
+
+      const attentionMarkup = p(
+        debriefLanguage.attention.start +
+          `<span style="color: ${attentionColor};">` +
+          b(`${attentionRatio}%`) +
+          `</span>` +
+          debriefLanguage.attention.end
       );
       const breakMarkup = p(debriefLanguage.takeBreak);
       const completeBlockMarkup = p(debriefLanguage.completeBlock);
 
       return (
         header +
-        body(div(accuracyMarkup + breakMarkup + completeBlockMarkup, { class: "container" }))
+        body(
+          div(accuracyMarkup + attentionMarkup + breakMarkup + completeBlockMarkup, {
+            class: "container",
+          })
+        )
       );
     },
     on_load: function () {
@@ -198,6 +258,16 @@ async function createHoneycombBlock(jsPsych) {
     response_ends_trial: false,
     on_start: function () {
       console.log(jsPsych.timelineVariable("color_change_timestamps"));
+    },
+    on_load: function () {
+      const responseTrials = jsPsych.data
+        .get()
+        .filterCustom(
+          (trial) =>
+            trial.trial_index > lastDebriefTrialIndex &&
+            trial.trial_type === "video-keyboard-response"
+        );
+      console.log(responseTrials.count());
     },
   };
 
@@ -288,6 +358,9 @@ async function createHoneycombBlock(jsPsych) {
     button_label: "Next",
     labels: ["0%", "100%"],
     step: 0.001,
+    on_load: function () {
+      console.log("sliderTrial");
+    },
   };
 
   // Conditional wrapper to determine if sliderTrial should be shown
@@ -770,10 +843,21 @@ const createDebriefTrial = (jsPsych) => ({
       accuracy = 0;
     }
 
+    let accuracyColor;
+    if (accuracy < 33) {
+      accuracyColor = "red";
+    } else if (accuracy >= 33 && accuracy <= 50) {
+      accuracyColor = "yellow";
+    } else {
+      accuracyColor = "green";
+    }
+
     const header = debriefLanguage.header;
     const accuracyMarkup = p(
       debriefLanguage.accuracy.experiment.start +
+        `<span style="color: ${accuracyColor};">` +
         b(accuracy) +
+        `</span>` +
         debriefLanguage.accuracy.experiment.end
     );
     const completeMarkup = p(debriefLanguage.complete);

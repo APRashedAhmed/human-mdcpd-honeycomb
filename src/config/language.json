@@ -43,12 +43,16 @@
         "accuracy": {
           "block": {
             "start": "You have completed this block of videos. You responded correctly on ",
-            "end": "<b>%</b> of the trials."
+            "end": " of the trials."
           },
           "experiment": {
             "start": "You have completed all videos in the experiment. You responded correctly on ",
-            "end": "<b>%</b> of all trials."
+            "end": " of all trials."
           }
+        },
+        "attention": {
+          "start": "You fully responded to ",
+          "end": " of all trials in this block"
         },
         "reactionTime": {
           "start": "Your average response time was ",
