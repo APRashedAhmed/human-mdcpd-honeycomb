@@ -224,7 +224,7 @@ async function createHoneycombBlock(jsPsych) {
       document.addEventListener("keydown", window.q_key_handler);
       window.clear_timer = 1;
 
-      var wait_time = 1 * 60 * 1000; // 1 minute
+      var wait_time = 5 * 60 * 1000; // 1 minute
       var start_time = performance.now();
 
       var interval = setInterval(function () {
