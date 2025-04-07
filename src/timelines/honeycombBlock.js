@@ -216,24 +216,41 @@ async function createHoneycombBlock(jsPsych) {
       );
     },
     on_load: function () {
-      var wait_time = 5 * 60 * 1000; // in milliseconds
+      window.q_key_handler = function (e) {
+        if (e.key == "q") {
+          window.clear_timer = -1;
+        }
+      };
+      document.addEventListener("keydown", window.q_key_handler);
+      window.clear_timer = 1;
+
+      var wait_time = 1 * 60 * 1000; // 1 minute
       var start_time = performance.now();
-      document.querySelector("button").disabled = true;
+
       var interval = setInterval(function () {
         var time_left = wait_time - (performance.now() - start_time);
         var minutes = Math.floor(time_left / 1000 / 60);
-        var seconds = Math.floor((time_left - minutes * 1000 * 60) / 1000);
+        var seconds = Math.floor((time_left - minutes * 60 * 1000) / 1000);
         var seconds_str = seconds.toString().padStart(2, "0");
-        document.querySelector("#clock").innerHTML = minutes + ":" + seconds_str;
+
+        const clockElement = document.querySelector("#clock");
         if (time_left <= 0) {
-          document.querySelector("#clock").innerHTML = "0:00";
-          document.querySelector("button").disabled = false;
+          if (clockElement) clockElement.innerHTML = "0:00";
+          window.clear_timer = -1;
+        }
+        if (window.clear_timer > 0) {
+          if (clockElement) clockElement.innerHTML = minutes + ":" + seconds_str;
+        } else {
           clearInterval(interval);
         }
       }, 250);
     },
+
+    on_finish: function () {
+      document.removeEventListener("keydown", window.q_key_handler);
+    },
     choices: ["Continue"],
-    trial_duration: 300000,
+    trial_duration: 60000,
     data: {
       task: "Block Debrief",
     },
