@@ -33,6 +33,7 @@
         "video_3": "assets/trials/walkthrough/video_3.html",
         "video_4": "assets/trials/walkthrough/video_4.html",
         "video_5": "assets/trials/walkthrough/video_5.html",
+        "video_6": "assets/trials/walkthrough/video_6.html",
         "endWalkthrough": "assets/trials/walkthrough/end.html"
       },
       "endPractice": {

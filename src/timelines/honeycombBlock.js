@@ -617,24 +617,29 @@ async function createWalkthroughTrial(jsPsych) {
         text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_1),
       },
       {
-        stimulus: ["assets/videos/walkthrough/2_lower_number_of_changes_red.mp4"],
+        stimulus: ["assets/videos/walkthrough/2_random_velocity_changes_red.mp4"],
         correct_response: 0,
         text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_2),
       },
       {
-        stimulus: ["assets/videos/walkthrough/3_higher_number_of_changes_blue.mp4"],
-        correct_response: 2,
+        stimulus: ["assets/videos/walkthrough/3_lower_number_of_changes_red.mp4"],
+        correct_response: 0,
         text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_3),
       },
       {
-        stimulus: ["assets/videos/walkthrough/4_introduce_the_grayzone_red.mp4"],
-        correct_response: 0,
+        stimulus: ["assets/videos/walkthrough/4_higher_number_of_changes_blue.mp4"],
+        correct_response: 2,
         text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_4),
       },
       {
-        stimulus: ["assets/videos/walkthrough/5_videos_end_in_the_grayzone_green.mp4"],
-        correct_response: 1,
+        stimulus: ["assets/videos/walkthrough/5_introduce_the_grayzone_red.mp4"],
+        correct_response: 0,
         text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_5),
+      },
+      {
+        stimulus: ["assets/videos/walkthrough/6_videos_end_in_the_grayzone_green.mp4"],
+        correct_response: 1,
+        text: await fetchHtmlContentIfNeeded(honeycombLanguage.walkthrough.video_6),
       },
     ];
     return trial_videos;
