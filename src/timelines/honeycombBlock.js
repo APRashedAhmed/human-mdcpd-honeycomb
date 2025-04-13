@@ -373,7 +373,7 @@ async function createHoneycombBlock(jsPsych) {
       return Math.random() * 100; // Re-randomize for each trial
     },
     button_label: "Next",
-    labels: ["0%", "100%"],
+    labels: ["Low", "High"],
     step: 0.001,
     on_load: function () {
       console.log("sliderTrial");
@@ -605,7 +605,7 @@ async function createWalkthroughTrial(jsPsych) {
       return Math.random() * 100; // Re-randomize for each trial
     },
     button_label: "Next",
-    labels: ["0%", "100%"],
+    labels: ["Low", "High"],
     step: 0.001,
   };
 
@@ -739,7 +739,7 @@ function createPracticeTrial(jsPsych) {
       return Math.random() * 100; // Re-randomize for each trial
     },
     button_label: "Next",
-    labels: ["0%", "100%"],
+    labels: ["Low", "High"],
     step: 0.001,
   };
 
