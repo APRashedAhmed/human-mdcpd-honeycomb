@@ -87,6 +87,8 @@ async function createHoneycombBlock(jsPsych) {
 
       // Determine the correct response based on the file name
       let correct_resp = "";
+      console.log(fileName);
+      console.log("Filename end character:", fileName.charAt(fileName.length - 5));
       switch (fileName.charAt(fileName.length - 5)) {
         case "d":
           correct_resp = 0;
@@ -139,9 +141,12 @@ async function createHoneycombBlock(jsPsych) {
             trial.trial_index > currentLastIndex &&
             (trial.task === "response" || trial.trial_type === "html-slider-response")
         );
+      const choiceTrials = jsPsych.data
+        .get()
+        .filterCustom((trial) => trial.trial_index > currentLastIndex && trial.task === "response");
 
       const correct_trials = responseTrials.filter({ correct: true });
-      let accuracy = Math.round((correct_trials.count() / responseTrials.count()) * 100);
+      let accuracy = Math.round((correct_trials.count() / choiceTrials.count()) * 100);
       const debriefLanguage = honeycombLanguage.debrief;
       if (isNaN(accuracy)) {
         accuracy = 0;
@@ -274,7 +279,8 @@ async function createHoneycombBlock(jsPsych) {
     trial_ends_after_video: true,
     response_ends_trial: false,
     on_start: function () {
-      console.log(jsPsych.timelineVariable("color_change_timestamps"));
+      // console.log(jsPsych.timelineVariable("color_change_timestamps"));
+      console.log(jsPsych.timelineVariable("stimulus"));
     },
     on_load: function () {
       const responseTrials = jsPsych.data
@@ -349,12 +355,15 @@ async function createHoneycombBlock(jsPsych) {
       correct_response: jsPsych.timelineVariable("correct_response"),
     },
     on_finish: function (data) {
-      data.correct = data.response
-        ? jsPsych.pluginAPI.compareKeys(data.response.toString(), data.correct_response.toString())
-        : false;
-      console.log(data.correct);
+      data.correct =
+        data.response != null
+          ? jsPsych.pluginAPI.compareKeys(
+              data.response.toString(),
+              data.correct_response.toString()
+            )
+          : false;
+      console.log("Correct:", data.correct);
       var proportion_complete = jsPsych.getProgressBarCompleted();
-      console.log(proportion_complete);
       jsPsych.setProgressBar(proportion_complete + 1 / 275);
     },
   };

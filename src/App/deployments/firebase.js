@@ -84,13 +84,13 @@ async function addToFirebase(data, retries = 3) {
   const participantID = data.participant_id;
   const startDate = data.start_date;
 
-  console.log("firebase data:\n", data);
+  // console.log("firebase data:\n", data);
 
   const experiment = getExperimentRef(studyID, participantID, startDate);
 
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      await experiment.update('trials', firebase.firestore.FieldValue.arrayUnion(data));
+      await experiment.update("trials", firebase.firestore.FieldValue.arrayUnion(data));
       console.log("Data successfully added to Firebase");
       break; // Exit loop if successful
     } catch (error) {
