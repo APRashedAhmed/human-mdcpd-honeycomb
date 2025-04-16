@@ -255,7 +255,7 @@ async function createHoneycombBlock(jsPsych) {
       document.removeEventListener("keydown", window.q_key_handler);
     },
     choices: ["Continue"],
-    trial_duration: 60000,
+    trial_duration: 300000,
     data: {
       task: "Block Debrief",
     },
