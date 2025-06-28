@@ -10,7 +10,7 @@ async function getVideoFilePaths() {
     "public",
     "assets",
     "videos",
-    "hbb_dataset_250627_004521_2190033339",
+    "hbb_dataset_250628_172839_467696137",
     "videos",
   );
   let videoFilePaths = [];
