@@ -830,7 +830,7 @@ function createPracticeTrial(jsPsych) {
       }
       let correct_answer = `<p>The correct answer was <span style='color: ${correct_color}'> <b>${correct_color}</b>.<span>`;
 
-      return "<div>" + user_answer + correct_answer + "</div>";
+      return "<div>" + user_answer + " " + correct_answer + "</div>";
     },
     choices: ["Continue"],
   };
