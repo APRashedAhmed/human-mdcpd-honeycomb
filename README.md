@@ -103,10 +103,10 @@ Rename the file to reflect the task version it represents (for example
 from pathlib import Path
 from hmdcpd import download
 
-FILE_PATH = Path("<PATH_TO_DEMOGRAPHICS_DATA>")
-OUT_DIR = Path("<PATH_TO_OUTPUT_DIRECTORY>")
-OUT_FILENAME = "hbb_participant_ids"
 VERSION = "<VERSION>"
+FILE_PATH = Path(f"./hbb_demographics_{VERSION}.csv")
+OUT_DIR = Path(".")
+OUT_FILENAME = "hbb_participant_ids"
 
 download.extract_participant_ids(
 	path_demo=FILE_PATH,
